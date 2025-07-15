@@ -2,7 +2,7 @@ import { RevealOnScroll } from "../RevealOnScroll";
 
 export const About = () => {
   const frontendSkills = [
-    "React",
+    "ReactJS",
     "Kotlin",
     "Flutter",
   ];
