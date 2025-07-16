@@ -13,9 +13,41 @@ export const Contact = () => {
 
   const [status, setStatus] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setStatus("✅ Message Sent!");
+
+    try {
+      const response = await fetch("https://formspree.io/f/xblkjgao", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          service: formData.service,
+          whatsapp: `${formData.countryCode} ${formData.whatsapp}`,
+          message: formData.message,
+        }),
+      });
+
+      if (response.ok) {
+        setStatus("✅ Message Sent!");
+        setFormData({
+          name: "",
+          email: "",
+          service: "",
+          countryCode: "",
+          whatsapp: "",
+          message: "",
+        });
+      } else {
+        setStatus("❌ Failed to send message.");
+      }
+    } catch (error) {
+      setStatus("❌ Something went wrong.");
+    }
   };
 
   return (
@@ -30,8 +62,6 @@ export const Contact = () => {
           </h2>
 
           <form
-            action="https://formspree.io/f/xblkjgao"
-            method="POST"
             onSubmit={handleSubmit}
             className="space-y-6 bg-white/5 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-red-500/10"
           >
@@ -71,11 +101,21 @@ export const Contact = () => {
                 setFormData({ ...formData, service: e.target.value })
               }
             >
-              <option value="" className="text-gray-400">Select Service Type</option>
-              <option value="Web Design" className="text-black">Web Design</option>
-              <option value="App Development" className="text-black">App Development</option>
-              <option value="UI/UX Design" className="text-black">UI/UX Design</option>
-              <option value="Graphic Designing" className="text-black">Graphic Designing</option>
+              <option value="" className="text-gray-400">
+                Select Service Type
+              </option>
+              <option value="Web Design" className="text-black">
+                Web Design
+              </option>
+              <option value="App Development" className="text-black">
+                App Development
+              </option>
+              <option value="UI/UX Design" className="text-black">
+                UI/UX Design
+              </option>
+              <option value="Graphic Designing" className="text-black">
+                Graphic Designing
+              </option>
             </select>
 
             {/* Country Code + WhatsApp */}
@@ -90,30 +130,78 @@ export const Contact = () => {
                 }
                 className="w-1/3 bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white transition focus:outline-none focus:ring-2 focus:ring-red-500"
               >
-                <option className="text-black" value="">Code</option>
-                <option className="text-black" value="+92">🇵🇰 +92 (Pakistan)</option>
-                <option className="text-black" value="+1">🇺🇸 +1 (USA)</option>
-                <option className="text-black" value="+91">🇮🇳 +91 (India)</option>
-                <option className="text-black" value="+44">🇬🇧 +44 (UK)</option>
-                <option className="text-black" value="+61">🇦🇺 +61 (Australia)</option>
-                <option className="text-black" value="+971">🇦🇪 +971 (UAE)</option>
-                <option className="text-black" value="+880">🇧🇩 +880 (Bangladesh)</option>
-                <option className="text-black" value="+93">🇦🇫 +93 (Afghanistan)</option>
-                <option className="text-black" value="+81">🇯🇵 +81 (Japan)</option>
-                <option className="text-black" value="+86">🇨🇳 +86 (China)</option>
-                <option className="text-black" value="+49">🇩🇪 +49 (Germany)</option>
-                <option className="text-black" value="+33">🇫🇷 +33 (France)</option>
-                <option className="text-black" value="+39">🇮🇹 +39 (Italy)</option>
-                <option className="text-black" value="+34">🇪🇸 +34 (Spain)</option>
-                <option className="text-black" value="+7">🇷🇺 +7 (Russia)</option>
-                <option className="text-black" value="+62">🇮🇩 +62 (Indonesia)</option>
-                <option className="text-black" value="+234">🇳🇬 +234 (Nigeria)</option>
-                <option className="text-black" value="+27">🇿🇦 +27 (South Africa)</option>
-                <option className="text-black" value="+964">🇮🇶 +964 (Iraq)</option>
-                <option className="text-black" value="+90">🇹🇷 +90 (Turkey)</option>
-                <option className="text-black" value="+974">🇶🇦 +974 (Qatar)</option>
-                <option className="text-black" value="+966">🇸🇦 +966 (Saudi Arabia)</option>
-                <option className="text-black" value="+98">🇮🇷 +98 (Iran)</option>
+                <option className="text-black" value="">
+                  Code
+                </option>
+                <option className="text-black" value="+92">
+                  🇵🇰 +92 (Pakistan)
+                </option>
+                <option className="text-black" value="+1">
+                  🇺🇸 +1 (USA)
+                </option>
+                <option className="text-black" value="+91">
+                  🇮🇳 +91 (India)
+                </option>
+                <option className="text-black" value="+44">
+                  🇬🇧 +44 (UK)
+                </option>
+                <option className="text-black" value="+61">
+                  🇦🇺 +61 (Australia)
+                </option>
+                <option className="text-black" value="+971">
+                  🇦🇪 +971 (UAE)
+                </option>
+                <option className="text-black" value="+880">
+                  🇧🇩 +880 (Bangladesh)
+                </option>
+                <option className="text-black" value="+93">
+                  🇦🇫 +93 (Afghanistan)
+                </option>
+                <option className="text-black" value="+81">
+                  🇯🇵 +81 (Japan)
+                </option>
+                <option className="text-black" value="+86">
+                  🇨🇳 +86 (China)
+                </option>
+                <option className="text-black" value="+49">
+                  🇩🇪 +49 (Germany)
+                </option>
+                <option className="text-black" value="+33">
+                  🇫🇷 +33 (France)
+                </option>
+                <option className="text-black" value="+39">
+                  🇮🇹 +39 (Italy)
+                </option>
+                <option className="text-black" value="+34">
+                  🇪🇸 +34 (Spain)
+                </option>
+                <option className="text-black" value="+7">
+                  🇷🇺 +7 (Russia)
+                </option>
+                <option className="text-black" value="+62">
+                  🇮🇩 +62 (Indonesia)
+                </option>
+                <option className="text-black" value="+234">
+                  🇳🇬 +234 (Nigeria)
+                </option>
+                <option className="text-black" value="+27">
+                  🇿🇦 +27 (South Africa)
+                </option>
+                <option className="text-black" value="+964">
+                  🇮🇶 +964 (Iraq)
+                </option>
+                <option className="text-black" value="+90">
+                  🇹🇷 +90 (Turkey)
+                </option>
+                <option className="text-black" value="+974">
+                  🇶🇦 +974 (Qatar)
+                </option>
+                <option className="text-black" value="+966">
+                  🇸🇦 +966 (Saudi Arabia)
+                </option>
+                <option className="text-black" value="+98">
+                  🇮🇷 +98 (Iran)
+                </option>
               </select>
 
               {/* WhatsApp Number */}
