@@ -36,6 +36,13 @@ export const Projects = () => {
                 tech: ["ReactJS", "TailwindCSS", "PDF Converter"],
                 link: "https://faizan-invoice-generator.vercel.app/",
               },
+              {
+                title: "Pixel Crafter Portfolio",
+                description:
+                  "Pixel Crafter is a creative studio offering graphic design and video editing services for brands and businesses.",
+                tech: ["ReactJS", "TailwindCSS"],
+                link: "https://pixelcrafter.vercel.app/",
+              },
             ].map((project, index) => (
               <div
                 key={index}
