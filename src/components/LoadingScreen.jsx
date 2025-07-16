@@ -12,24 +12,24 @@ export const LoadingScreen = ({ onComplete }) => {
 
       if (index > fullText.length) {
         clearInterval(interval);
-
-        setTimeout(() => {
-          onComplete();
-        }, 1000);
+        setTimeout(() => onComplete(), 1000);
       }
-    }, 100);
+    }, 120);
 
     return () => clearInterval(interval);
   }, [onComplete]);
 
   return (
-    <div className="fixed inset-0 z-50 bg-black text-gray-100 flex flex-col items-center justify-center">
-      <div className="mb-4 text-4xl font-mono font-bold">
-        {text} <span className="animate-blink ml-1">| </span>
+    <div className="fixed inset-0 z-50 bg-black text-white flex flex-col items-center justify-center transition-all duration-700">
+      {/* Typing Title */}
+      <div className="text-4xl md:text-5xl font-mono font-bold mb-6 flex items-center">
+        {text}
+        <span className="ml-1 animate-pulse text-red-500">|</span>
       </div>
 
-      <div className="w-[200px] h-[2px] bg-gray-800 rounded relative overflow-hidden">
-        <div className="w-[40%] h-full bg-red-500 shadow-[0_0_15px_#3b82f6] animate-loading-bar"></div>
+      {/* Progress Bar Container */}
+      <div className="w-64 h-2 rounded-full bg-white/10 overflow-hidden relative">
+        <div className="absolute h-full w-full bg-gradient-to-r from-red-500 via-red-400 to-red-600 animate-progress-glow" />
       </div>
     </div>
   );

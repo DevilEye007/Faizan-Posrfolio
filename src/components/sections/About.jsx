@@ -1,51 +1,36 @@
 import { RevealOnScroll } from "../RevealOnScroll";
 
 export const About = () => {
-  const frontendSkills = [
-    "ReactJS",
-    "Kotlin",
-    "Flutter",
-  ];
-
-  const backendSkills = [
-    "Node.js", 
-    "Python",
-    "MongoDB"];
-
-    const GraphiDesigning = [
-      "Adob illustrator",
-      "Adob photoshop",
-      "Corel draw",
-    ];
+  const frontendSkills = ["ReactJS", "Kotlin", "Flutter"];
+  const backendSkills = ["Node.js", "Python", "MongoDB"];
+  const graphicDesigning = ["Adobe Illustrator", "Adobe Photoshop", "Corel Draw"];
 
   return (
-    <section
-      id="about"
-      className="min-h-screen flex items-center justify-center py-20"
-    >
+    <section id="about" className="min-h-screen flex items-center justify-center py-20 bg-black">
       <RevealOnScroll>
-        <div className="max-w-3xl mx-auto px-4">
-          <h2 className="text-3xl font-bold mb-8 bg-gradient-to-r border-red-700 to-red-500 bg-clip-text text-transparent text-center">
-            {" "}
+        <div className="max-w-4xl mx-auto px-4 text-white">
+          {/* Heading */}
+          <h2 className="text-4xl md:text-5xl font-extrabold mb-12 text-center bg-gradient-to-r from-red-700 to-red-500 bg-clip-text text-transparent drop-shadow-md">
             About Me
           </h2>
 
-          <div className="rounded-xl p-8 border-white/10 border hover:-translate-y-1 transition-all">
-            <p className="text-gray-300 mb-6">
-              Passionate developer with expertise in building scalable web
-              applications and creating innovative solutions.
+          {/* Summary Card */}
+          <div className="rounded-2xl p-8 border border-red-500/30 bg-white/5 backdrop-blur-md hover:-translate-y-1 transition-all duration-500 shadow-lg">
+            <p className="text-gray-300 mb-8 text-lg leading-relaxed">
+              Passionate developer with expertise in building scalable web & mobile applications,
+              backed by strong UI/UX design and logic-based programming.
             </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="rounded-xl p-6 hover:-translate-y-1 transition-all">
-                <h3 className="text-xl font-bold mb-4"> Frontend</h3>
+            {/* Skills Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {/* Frontend */}
+              <div className="rounded-xl p-6 border border-red-500/20 bg-red-500/5 hover:bg-red-500/10 transition-all">
+                <h3 className="text-xl font-semibold mb-4 text-red-400">🎯 Frontend</h3>
                 <div className="flex flex-wrap gap-2">
                   {frontendSkills.map((tech, key) => (
                     <span
                       key={key}
-                      className="bg-red-500/15 text-red-500 py-1 px-3 rounded-full text-sm hover:bg-red-500/20 
-                                    hover:shadow-[0_2px_8px_rgba(59,130,246,0.2)] transition
-                    "
+                      className="bg-red-500/20 text-red-300 py-1 px-3 rounded-full text-sm hover:bg-red-500/30 hover:text-white transition shadow-sm"
                     >
                       {tech}
                     </span>
@@ -53,15 +38,14 @@ export const About = () => {
                 </div>
               </div>
 
-              <div className="rounded-xl p-6 hover:-translate-y-1 transition-all">
-                <h3 className="text-xl font-bold mb-4"> Backend</h3>
+              {/* Backend */}
+              <div className="rounded-xl p-6 border border-red-500/20 bg-red-500/5 hover:bg-red-500/10 transition-all">
+                <h3 className="text-xl font-semibold mb-4 text-red-400">🔧 Backend</h3>
                 <div className="flex flex-wrap gap-2">
                   {backendSkills.map((tech, key) => (
                     <span
                       key={key}
-                      className="bg-red-500/15 text-red-500 py-1 px-3 rounded-full text-sm hover:bg-red-500/20 
-                                    hover:shadow-[0_2px_8px_rgba(59,130,2246,0.2)] transition
-                    "
+                      className="bg-red-500/20 text-red-300 py-1 px-3 rounded-full text-sm hover:bg-red-500/30 hover:text-white transition shadow-sm"
                     >
                       {tech}
                     </span>
@@ -69,15 +53,14 @@ export const About = () => {
                 </div>
               </div>
 
-              <div className="rounded-xl p-6 hover:-translate-y-1 transition-all">
-                <h3 className="text-xl font-bold mb-4"> Graphic Designing</h3>
+              {/* Graphic Design */}
+              <div className="rounded-xl p-6 border border-red-500/20 bg-red-500/5 hover:bg-red-500/10 transition-all md:col-span-2">
+                <h3 className="text-xl font-semibold mb-4 text-red-400">🎨 Graphic Designing</h3>
                 <div className="flex flex-wrap gap-2">
-                  {GraphiDesigning.map((tech, key) => (
+                  {graphicDesigning.map((tech, key) => (
                     <span
                       key={key}
-                      className="bg-red-500/15 text-red-500 py-1 px-3 rounded-full text-sm hover:bg-red-500/20 
-                                    hover:shadow-[0_2px_8px_rgba(59,130,246,0.2)] transition
-                    "
+                      className="bg-red-500/20 text-red-300 py-1 px-3 rounded-full text-sm hover:bg-red-500/30 hover:text-white transition shadow-sm"
                     >
                       {tech}
                     </span>
@@ -87,33 +70,35 @@ export const About = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-            <div className="p-6 rounded-xl border-white/10 border hover:-translate-y-1 transition-all">
-              <h3 className="text-xl font-bold mb-4"> 🏫 Education </h3>
-              <ul className="list-disc list-inside text-gray-300 space-y-2">
-                <li>
-                  <strong> B.S. in Informatiom Technology </strong> - University of Gujrat
-                  (2021-2025)
-                </li>
-                <li>
-                  Relevant Coursework: Data Structures, Web Development, Cloud
-                  Computing...
-                </li>
-              </ul>
-            </div>
-            <div className="p-6 rounded-xl border-white/10 border hover:-translate-y-1 transition-all">
-              <h3 className="text-xl font-bold mb-4"> 💼 Work Experience </h3>
-              <div className="space-y-4 text-gray-300">
+          {/* Education & Experience */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10">
+            {/* Education */}
+            <div className="p-6 rounded-xl border border-red-500/20 bg-red-500/5 hover:bg-red-500/10 transition-all shadow">
+  <h3 className="text-xl font-bold mb-4 text-red-400">🎓 Education</h3>
+  <ul className="list-disc list-inside text-gray-300 space-y-2 text-sm">
+    <li>
+      <strong>B.S. in Information Technology</strong> — University of Gujrat (2021–2025)
+    </li>
+    <li>
+      Developed a cross-platform <strong>mobile application</strong> as a Final Year Project using <strong>Flutter</strong> and <strong>Firebase</strong>.
+    </li>
+    <li>
+      Worked as an <strong>Assistant Teacher</strong> for <strong>ReactJS</strong> and <strong>Tailwind CSS</strong>, helping peers and juniors with hands-on learning.
+    </li>
+  </ul>
+</div>
+
+
+            {/* Work Experience */}
+            <div className="p-6 rounded-xl border border-red-500/20 bg-red-500/5 hover:bg-red-500/10 transition-all shadow">
+              <h3 className="text-xl font-bold mb-4 text-red-400">💼 Experience</h3>
+              <div className="text-sm text-gray-300 space-y-2">
                 <div>
-                  <h4 className="font-semibold">
-                    {" "}
-                    Frontend Developer (2023 - Present){" "}
-                  </h4>
+                  <h4 className="font-semibold">Frontend Developer (2023 – Present)</h4>
                   <p>
-                    Developed and maintained microservices for applications.
+                    Developed and maintained scalable frontends with ReactJS and Tailwind, focusing on user-friendly interfaces and responsive design.
                   </p>
                 </div>
-
               </div>
             </div>
           </div>

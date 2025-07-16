@@ -4,139 +4,71 @@ export const Projects = () => {
   return (
     <section
       id="projects"
-      className="min-h-screen flex items-center justify-center py-20"
+      className="min-h-screen flex items-center justify-center py-20 bg-black text-white"
     >
       <RevealOnScroll>
-        <div className="max-w-5xl mx-auto px-4">
-          <h2 className="text-3xl font-bold mb-8 bg-gradient-to-r from-red-500 to-red-400 bg-clip-text text-transparent text-center">
-            {" "}
-            Featured Projects
+        <div className="max-w-6xl mx-auto px-4">
+          <h2 className="text-4xl font-extrabold mb-12 text-center bg-gradient-to-r from-red-600 to-red-400 text-transparent bg-clip-text drop-shadow-lg">
+            🚀 Featured Projects
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div
-              className="
-              glass p-6 rounded-xl border border-white/10 
-              hover:-translate-y-1 hover:border-red-500/30
-              hover:shadow-[10px_10px_40px_rgba(59,130,246,0.1)]
-              transition-all
-            "
-            >
-              <h3 className="text-xl font-bold mb-2">E-Commerce Store</h3>
-              <p className="text-gray-400 mb-4">
-                ​Roucha Cielo is an online retailer specializing in the latest
-                T-shirt trends, offering high-quality products at competitive
-                prices. They emphasize fast shipping, secure payments, and
-                excellent customer service.
-              </p>
-              <div className="flex flex-wrap gap-2 mb-4">
-                {["React", "Express", "MongoDB", "TailwindCSS"].map((tech, key) => (
-                  <span
-                    key={key}
-                    className="
-                      bg-red-500/10 text-red-500 py-1 px-3 
-                      rounded-full text-sm
-                      transition
-                      hover:bg-red-500/20 hover:-translate-y-0.5
-                      hover:shadow-[0_2px_8px_rgba(59,130,246,0.2)]
-                    "
-                  >
-                    {tech}
-                  </span>
-                ))}
-              </div>
-              <div className="flex justify-between items-center">
-                <a
-                href="https://rouchacielo.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-red-300 hover:text-red-500 transition-colors my-4"
-              >
-                View Project →
-              </a>
-              </div>
-            </div>
 
-            <div
-              className="
-              glass p-6 rounded-xl border border-white/10 
-              hover:-translate-y-1 hover:border-red-500/30
-              hover:shadow-[10px_10px_40px_rgba(59,130,246,0.1)]
-              transition-all
-            "
-            >
-              <h3 className="text-xl font-bold mb-2">Marks Management System</h3>
-              <p className="text-gray-400 mb-4">
-                The Marks Management System is a simple web app for managing student 
-                records and marks, with auto calculations and a clean, responsive interface.
-              </p>
-              <div className="flex flex-wrap gap-2 mb-4">
-                {["ReactJS", "TailwindCSS", "MS Excel"].map((tech, key) => (
-                  <span
-                    key={key}
-                    className="
-                      bg-red-500/10 text-red-500 py-1 px-3 
-                      rounded-full text-sm
-                      transition
-                      hover:bg-red-500/20 hover:-translate-y-0.5
-                      hover:shadow-[0_2px_8px_rgba(59,130,246,0.2)]
-                    "
-                  >
-                    {tech}
-                  </span>
-                ))}
-              </div>
-              <div className="flex justify-between items-center">
-                <a
-                href="https://marks-managmenet-system.vercel.app/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-red-300 hover:text-red-500 transition-colors my-4"
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* === Project Card Template === */}
+            {[
+              {
+                title: "E-Commerce Store",
+                description:
+                  "Roucha Cielo is an online retailer offering the latest T-shirt trends with fast shipping, secure payments, and top-tier customer service.",
+                tech: ["React", "Express", "MongoDB", "TailwindCSS"],
+                link: "https://rouchacielo.com/",
+              },
+              {
+                title: "Marks Management System",
+                description:
+                  "A web app for managing student records and calculating marks with a responsive UI and Excel data export.",
+                tech: ["ReactJS", "TailwindCSS", "MS Excel"],
+                link: "https://marks-managmenet-system.vercel.app/",
+              },
+              {
+                title: "Invoice Generator",
+                description:
+                  "Create printable invoices quickly with auto-calculation and itemized lists using this sleek web app.",
+                tech: ["ReactJS", "TailwindCSS", "PDF Converter"],
+                link: "https://faizan-invoice-generator.vercel.app/",
+              },
+            ].map((project, index) => (
+              <div
+                key={index}
+                className="bg-white/5 border border-red-500/20 rounded-2xl p-6 shadow-lg hover:shadow-red-500/20 transition-all duration-300 hover:-translate-y-1 backdrop-blur-sm"
               >
-                View Project →
-              </a>
-              </div>
-            </div>
-            <div
-              className="
-              glass p-6 rounded-xl border border-white/10 
-              hover:-translate-y-1 hover:border-red-500/30
-              hover:shadow-[10px_10px_40px_rgba(59,130,246,0.1)]
-              transition-all
-            "
-            >
-              <h3 className="text-xl font-bold mb-2">Invoice Generator</h3>
-              <p className="text-gray-400 mb-4">
-                The Invoice Generator is a sleek web app for creating professional 
-                invoices quickly and easily. Users can add items, auto-calculate totals, 
-                and download printable invoices.
-              </p>
-              <div className="flex flex-wrap gap-2 mb-4">
-                {["ReactJS", "TailwindCSS", "PDF Converter"].map((tech, key) => (
-                  <span
-                    key={key}
-                    className="
-                      bg-red-500/10 text-red-500 py-1 px-3 
-                      rounded-full text-sm
-                      transition
-                      hover:bg-red-500/20 hover:-translate-y-0.5
-                      hover:shadow-[0_2px_8px_rgba(59,130,246,0.2)]
-                    "
-                  >
-                    {tech}
-                  </span>
-                ))}
-              </div>
-              <div className="flex justify-between items-center">
+                <h3 className="text-2xl font-bold text-red-400 mb-3">
+                  {project.title}
+                </h3>
+                <p className="text-gray-300 text-sm mb-5 leading-relaxed">
+                  {project.description}
+                </p>
+
+                <div className="flex flex-wrap gap-2 mb-5">
+                  {project.tech.map((tech, key) => (
+                    <span
+                      key={key}
+                      className="bg-red-500/10 text-red-400 py-1 px-3 rounded-full text-xs font-medium hover:bg-red-500/20 hover:shadow-md transition-all"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+
                 <a
-                href="https://faizan-invoice-generator.vercel.app/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-red-300 hover:text-red-500 transition-colors my-4"
-              >
-                View Project →
-              </a>
+                  href={project.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-red-300 hover:text-white text-sm font-semibold inline-flex items-center gap-1 transition-all duration-300 hover:underline hover:underline-offset-4"
+                >
+                  View Project →
+                </a>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </RevealOnScroll>
