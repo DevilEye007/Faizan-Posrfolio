@@ -58,6 +58,12 @@ export const Home = () => {
                 View Projects
               </a>
               <a
+                href="#about"
+                className="border border-red-500/60 text-red-400 py-3 px-6 rounded-xl font-medium transition-all duration-300 hover:bg-red-500/10 hover:text-white hover:shadow-md"
+              >
+                About Me
+              </a>
+              <a
                 href="#contact"
                 className="border border-red-500/60 text-red-400 py-3 px-6 rounded-xl font-medium transition-all duration-300 hover:bg-red-500/10 hover:text-white hover:shadow-md"
               >
