@@ -3,7 +3,7 @@ import { FaLinkedinIn, FaGithub } from "react-icons/fa";
 export const Footer = () => {
   return (
     <footer className="bg-black text-white pt-12 pb-6 px-6 mt-12 border-t border-red-500/20">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10">
 
         {/* Brand + Intro */}
         <div>
@@ -31,7 +31,7 @@ export const Footer = () => {
           <h4 className="text-xl font-semibold text-red-400 mb-4">Connect With Me</h4>
           <div className="flex gap-5 text-2xl">
             <a
-              href="www.linkedin.com/in/faizan-sultan-302b1b24b"
+              href="https://www.linkedin.com/in/faizan-sultan-302b1b24b"
               target="_blank"
               rel="noopener noreferrer"
               className="text-gray-300 hover:text-red-500 hover:scale-110 transition-transform duration-200"
@@ -48,6 +48,25 @@ export const Footer = () => {
             </a>
           </div>
         </div>
+
+        {/* Map Location */}
+        {/* Map Location */}
+<div>
+  <h4 className="text-xl font-semibold text-red-400 mb-4">My Location</h4>
+  <div className="w-full h-40 rounded-xl overflow-hidden border border-red-500/30 shadow-lg transform transition duration-300 hover:scale-[1.02]">
+    <iframe
+      title="Faizan's Location"
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13607.96249353462!2d74.6682389!3d32.2643398!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x391e9266ddf0af41%3A0x2a31c0937f9f31e9!2sPasrur%2C%20Punjab!5e0!3m2!1sen!2s!4v1658841241812!5m2!1sen!2s"
+      width="100%"
+      height="100%"
+      allowFullScreen=""
+      loading="lazy"
+      referrerPolicy="no-referrer-when-downgrade"
+      className="rounded-xl"
+    ></iframe>
+  </div>
+</div>
+
       </div>
 
       {/* Bottom Bar */}
