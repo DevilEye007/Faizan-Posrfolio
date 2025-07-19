@@ -1,4 +1,6 @@
 import { RevealOnScroll } from "../RevealOnScroll";
+import { FaDownload } from "react-icons/fa";
+import Resume from './Resume.pdf';
 
 export const About = () => {
   const frontendSkills = ["ReactJS", "Kotlin", "Flutter"];
@@ -74,20 +76,19 @@ export const About = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10">
             {/* Education */}
             <div className="p-6 rounded-xl border border-red-500/20 bg-red-500/5 hover:bg-red-500/10 transition-all shadow">
-  <h3 className="text-xl font-bold mb-4 text-red-400">🎓 Education</h3>
-  <ul className="list-disc list-inside text-gray-300 space-y-2 text-sm">
-    <li>
-      <strong>B.S. in Information Technology</strong> — University of Gujrat (2021–2025)
-    </li>
-    <li>
-      Developed a cross-platform <strong>mobile application</strong> as a Final Year Project using <strong>Flutter</strong> and <strong>Firebase</strong>.
-    </li>
-    <li>
-      Worked as an <strong>Assistant Teacher</strong> for <strong>ReactJS</strong> and <strong>Tailwind CSS</strong>, helping peers and juniors with hands-on learning.
-    </li>
-  </ul>
-</div>
-
+              <h3 className="text-xl font-bold mb-4 text-red-400">🎓 Education</h3>
+              <ul className="list-disc list-inside text-gray-300 space-y-2 text-sm">
+                <li>
+                  <strong>B.S. in Information Technology</strong> — University of Gujrat (2021–2025)
+                </li>
+                <li>
+                  Developed a cross-platform <strong>mobile application</strong> as a Final Year Project using <strong>Flutter</strong> and <strong>Firebase</strong>.
+                </li>
+                <li>
+                  Worked as an <strong>Assistant Teacher</strong> for <strong>ReactJS</strong> and <strong>Tailwind CSS</strong>, helping peers and juniors with hands-on learning.
+                </li>
+              </ul>
+            </div>
 
             {/* Work Experience */}
             <div className="p-6 rounded-xl border border-red-500/20 bg-red-500/5 hover:bg-red-500/10 transition-all shadow">
@@ -101,6 +102,18 @@ export const About = () => {
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* Resume Download Button */}
+          <div className="mt-10 text-center">
+            <a
+              href={Resume}
+              download
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-600 text-white font-semibold py-3 px-6 rounded-full transition-all duration-300 shadow-lg hover:shadow-red-500/50 transform hover:scale-105"
+            >
+              <FaDownload className="text-xl" />
+              Download Resume
+            </a>
           </div>
         </div>
       </RevealOnScroll>
