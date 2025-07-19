@@ -9,7 +9,7 @@ export const Projects = () => {
       <RevealOnScroll>
         <div className="max-w-6xl mx-auto px-4">
           <h2 className="text-4xl font-extrabold mb-12 text-center bg-gradient-to-r from-red-600 to-red-400 text-transparent bg-clip-text drop-shadow-lg">
-            🚀 Featured Projects
+            Featured Projects
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

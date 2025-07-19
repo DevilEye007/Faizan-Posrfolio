@@ -58,7 +58,7 @@ export const Contact = () => {
       <RevealOnScroll>
         <div className="w-full max-w-xl px-4">
           <h2 className="text-4xl font-extrabold mb-10 text-center bg-gradient-to-r from-red-600 to-red-400 text-transparent bg-clip-text">
-            📬 Get In Touch
+            Get In Touch
           </h2>
 
           <form
@@ -236,7 +236,7 @@ export const Contact = () => {
               type="submit"
               className="w-full bg-red-600 hover:bg-red-700 text-white py-3 px-6 rounded-lg font-semibold transition-all duration-300 hover:shadow-[0_0_15px_rgba(255,0,0,0.3)]"
             >
-              🚀 Send Message
+              Send Message
             </button>
 
             {/* Submission Status */}

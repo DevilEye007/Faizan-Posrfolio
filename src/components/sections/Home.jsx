@@ -55,13 +55,13 @@ export const Home = () => {
                 href="#projects"
                 className="bg-red-700 hover:bg-red-600 text-white py-3 px-6 rounded-xl font-medium transition transform hover:-translate-y-1 hover:shadow-[0_10px_20px_rgba(255,50,50,0.4)] duration-300"
               >
-                🚀 View Projects
+                View Projects
               </a>
               <a
                 href="#contact"
                 className="border border-red-500/60 text-red-400 py-3 px-6 rounded-xl font-medium transition-all duration-300 hover:bg-red-500/10 hover:text-white hover:shadow-md"
               >
-                📬 Contact Me
+                Contact Me
               </a>
             </div>
           </div>
