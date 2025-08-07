@@ -2,7 +2,7 @@ import { FaLinkedinIn, FaGithub } from "react-icons/fa";
 
 export const Footer = () => {
   return (
-    <footer className="bg-black text-white pt-16 pb-8 px-6 mt-20 border-t border-red-500/30">
+    <footer className="bg-black text-white pt-16 pb-8 px-6 border-t border-red-500/30">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10">
 
         {/* Brand + Intro */}
