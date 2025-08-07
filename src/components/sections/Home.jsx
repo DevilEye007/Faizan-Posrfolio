@@ -60,14 +60,15 @@ export const Home = () => {
               I build performant full-stack applications with clean code, modern design, and optimized user flows. By uniting frontend elegance with backend strength, I deliver systems that are scalable, maintainable, and genuinely enjoyable to use.
             </p>
 
-            {/* Buttons */}
-            <div className="flex flex-col sm:flex-row justify-center md:justify-start space-y-4 sm:space-y-0 sm:space-x-4">
-              <a
+            <a
                 href="#projects"
-                className="bg-gradient-to-tr from-red-700 to-red-500 hover:from-red-600 hover:to-red-400 text-white py-3 px-6 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-[0_10px_25px_rgba(255,0,0,0.3)]"
+                className="bg-gradient-to-tr from-red-700 to-red-500 hover:from-red-600 hover:to-red-400 text-white py-3 px-22 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-[0_10px_25px_rgba(255,0,0,0.3)]"
               >
                 View Projects
               </a>
+            {/* Buttons */}
+            <div className="flex flex-wrap justify-center md:justify-start gap-4 mt-10">
+              
               <a
                 href="#about"
                 className="border border-red-500 text-red-400 py-3 px-6 rounded-xl font-semibold transition-all duration-300 hover:bg-red-600/10 hover:text-white hover:scale-105"
