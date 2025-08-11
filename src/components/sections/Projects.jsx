@@ -30,6 +30,13 @@ export const Projects = () => {
       tech: ["ReactJS", "TailwindCSS"],
       link: "https://pixelcrafter.vercel.app/",
     },
+    {
+      title: "Expense Tracker",
+      description:
+        "Track your expenses effortlessly with this intuitive app that allows you to add, edit, and delete transactions, all while visualizing your spending habits.",
+      tech: ["ReactJS", "TailwindCSS"],
+      link: "https://expense-tracker-faiz.vercel.app/",
+    },
   ];
 
   const gamingProjects = [
