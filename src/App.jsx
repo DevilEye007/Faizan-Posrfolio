@@ -9,6 +9,7 @@ import "./index.css";
 import { Contact } from "./components/sections/Contact";
 import { Footer } from "./components/sections/Footer";
 import Rev from './components/sections/Review'
+import SkillsSection from "./components/sections/Skills";
 
 function App() {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -26,6 +27,7 @@ function App() {
         <MobileMenu menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
         <Home />
         <About />
+        <SkillsSection />
         <Projects />
         <Rev />
         <Contact />
