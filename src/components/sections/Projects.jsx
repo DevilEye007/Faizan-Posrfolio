@@ -55,7 +55,7 @@ export const Projects = () => {
       className="bg-white/5 border border-red-500/20 rounded-2xl p-6 shadow-lg hover:shadow-red-500/30 transition-all duration-300 hover:-translate-y-1 backdrop-blur-md"
     >
       <h3 className="text-2xl font-bold text-red-400 mb-2">{project.title}</h3>
-      <p className="text-gray-300 text-sm mb-5 leading-relaxed">
+      <p className="text-gray-300 text-sm mb-5 leading-relaxed text-justify">
         {project.description}
       </p>
       <div className="flex flex-wrap gap-2 mb-4">
@@ -82,7 +82,7 @@ export const Projects = () => {
   return (
     <section
       id="projects"
-      className="min-h-screen flex items-center justify-center py-20 bg-gradient-to-b from-gray-100 to-white dark:from-[#0f0f0f] dark:to-[#1a1a1a] text-white"
+      className="min-h-screen flex items-center justify-center py-20 bg-black text-white"
     >
       <RevealOnScroll>
         <div className="max-w-6xl mx-auto px-4">
@@ -90,8 +90,8 @@ export const Projects = () => {
             Projects
           </h2>
           <p className="text-center text-gray-400 mb-12 text-base max-w-3xl mx-auto">
-            A showcase of my latest creations — from full-stack web apps to
-            interactive browser games — built with modern frameworks, clean code,
+            A showcase of my latest creations from full-stack web apps to
+            interactive browser games built with modern frameworks, clean code,
             and a passion for design.
           </p>
 

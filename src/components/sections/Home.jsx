@@ -35,7 +35,7 @@ export const Home = () => {
             transition={{ duration: 1.2, delay: 0.2 }}
             className="z-10 max-w-xl"
           >
-            <h1 className="text-3xl md:text-6xl font-extrabold mb-6 bg-gradient-to-r from-red-700 via-red-500 to-red-400 bg-clip-text text-transparent drop-shadow-xl">
+            <h1 className="text-3xl md:text-5xl font-extrabold mb-6 bg-gradient-to-r from-red-700 via-red-500 to-red-400 bg-clip-text text-transparent drop-shadow-xl">
               Hi, I'm Faizan Sultan
             </h1>
 
@@ -44,8 +44,6 @@ export const Home = () => {
               <TypeAnimation
                 sequence={[
                   'Full Stack Developer', 1500,
-                  'Frontend Developer', 1500,
-                  'Backend Developer', 1500,
                   'Application Developer', 1500,
                   'Portfolio Developer', 1500,
                   'UI/UX Designer', 1500,
@@ -56,7 +54,7 @@ export const Home = () => {
               />
             </p>
 
-            <p className="text-gray-300 text-lg leading-relaxed mb-10">
+            <p className="text-gray-300 text-lg leading-relaxed mb-10 text-justify">
               I build performant full-stack applications with clean code, modern design, and optimized user flows. By uniting frontend elegance with backend strength, I deliver systems that are scalable, maintainable, and genuinely enjoyable to use.
             </p>
 

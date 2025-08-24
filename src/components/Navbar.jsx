@@ -44,7 +44,7 @@ export const Navbar = ({ menuOpen, setMenuOpen }) => {
 
           {/* Navigation Links */}
           <div className="hidden md:flex items-center space-x-8">
-            {["home", "about", "projects", "reviews", "contact"].map(
+            {["home", "about", "skills", "projects", "reviews", "contact"].map(
               (section) => (
                 <a
                   key={section}

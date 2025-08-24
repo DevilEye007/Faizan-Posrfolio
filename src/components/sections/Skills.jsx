@@ -6,7 +6,7 @@ import { RevealOnScroll } from "../RevealOnScroll";
 import { motion, AnimatePresence } from "framer-motion";
 import { Dialog } from "@headlessui/react";
 import { FaHtml5, FaCss3Alt, FaJs, FaReact, FaNodeJs } from "react-icons/fa";
-import { SiTailwindcss, SiMongodb, SiExpress } from "react-icons/si";
+import { SiTailwindcss, SiMongodb, SiExpress, SiFlutter } from "react-icons/si";
 
 function SkillsSection() {
   const skills = [
@@ -49,6 +49,11 @@ function SkillsSection() {
     name: "TailwindCSS", 
     icon: <SiTailwindcss className="text-sky-400 text-5xl" />, 
     description: "TailwindCSS is a utility-first CSS framework that accelerates UI development with prebuilt classes. It promotes clean and maintainable code by eliminating the need for custom CSS, allowing developers to rapidly prototype and build responsive designs." 
+  },
+  { 
+    name: "Flutter", 
+    icon: <SiFlutter className="text-sky-400 text-5xl" />, 
+    description: "Flutter is Google's open-source UI toolkit for building natively compiled applications from a single codebase. It empowers developers to create beautiful, fast experiences for mobile, web and desktop." 
   },
 ];
 
@@ -107,8 +112,7 @@ function SkillsSection() {
               >
                 {/* Icon Glow */}
                 <div className="relative flex items-center justify-center">
-                  <div className="absolute w-20 h-20 rounded-full bg-red-500/10 blur-xl 
-                                  group-hover:bg-red-500/20 transition-all"></div>
+                  <div className="absolute w-20 h-20 rounded-full transition-all"></div>
                   {skill.icon}
                 </div>
 
@@ -147,7 +151,7 @@ function SkillsSection() {
                 <Dialog.Title className="text-xl font-bold flex items-center gap-3">
                   {selectedSkill.icon} {selectedSkill.name}
                 </Dialog.Title>
-                <Dialog.Description className="mt-3 text-gray-300">
+                <Dialog.Description className="mt-3 text-gray-300 text-justify">
                   {selectedSkill.description}
                 </Dialog.Description>
 

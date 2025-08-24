@@ -18,7 +18,7 @@ export const MobileMenu = ({ menuOpen, setMenuOpen }) => {
 
       {/* Navigation Links */}
       <div className="flex flex-col items-center justify-center h-full space-y-6 transition-opacity duration-500">
-        {["Home", "About", "Projects", "Reviews", "Contact"].map((section, i) => (
+        {["Home", "About", "Skills", "Projects", "Reviews", "Contact"].map((section, i) => (
           <a
             key={section}
             href={`#${section.toLowerCase()}`}

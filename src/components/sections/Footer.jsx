@@ -10,7 +10,7 @@ export const Footer = () => {
           <h3 className="text-4xl font-extrabold mb-4 bg-gradient-to-r from-red-600 to-red-400 text-transparent bg-clip-text">
             Faizan Sultan
           </h3>
-          <p className="text-gray-400 text-sm leading-relaxed">
+          <p className="text-gray-400 text-sm leading-relaxed text-justify">
             Full-stack developer turning ideas into elegant, efficient, and scalable digital experiences.
           </p>
         </div>

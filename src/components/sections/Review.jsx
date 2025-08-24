@@ -60,7 +60,7 @@ const ReviewCard = ({ review }) => (
 const CustomerReview = () => {
   return (
     <section
-      className="py-16 sm:py-20 px-4 sm:px-6 bg-black text-gray-800 dark:text-white"
+      className="py-16 sm:py-20 px-4 sm:px-6 bg-gradient-to-b from-gray-100 to-white dark:from-[#0f0f0f] dark:to-[#1a1a1a] text-gray-800 dark:text-white"
       id="reviews"
     >
       <RevealOnScroll>
