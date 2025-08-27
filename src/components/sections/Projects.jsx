@@ -19,14 +19,14 @@ export const Projects = () => {
     {
       title: "Invoice Generator",
       description:
-        "Create sleek, printable invoices with auto-calculated totals and itemized entries — perfect for freelancers and small businesses.",
+        "Create sleek, printable invoices with auto calculated totals and itemized entries perfect for freelancers and small businesses.",
       tech: ["ReactJS", "TailwindCSS", "PDF Generator"],
       link: "https://faizan-invoice-generator.vercel.app/",
     },
     {
       title: "Pixel Crafter Portfolio",
       description:
-        "Creative studio portfolio showcasing high-end graphic design and video editing work built with smooth transitions and custom layouts.",
+        "Creative studio portfolio showcasing high end graphic design and video editing work built with smooth transitions and custom layouts.",
       tech: ["ReactJS", "TailwindCSS"],
       link: "https://pixelcrafter.vercel.app/",
     },
