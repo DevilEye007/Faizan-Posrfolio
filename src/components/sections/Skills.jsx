@@ -5,7 +5,7 @@ import { useState } from "react";
 import { RevealOnScroll } from "../RevealOnScroll";
 import { motion, AnimatePresence } from "framer-motion";
 import { Dialog } from "@headlessui/react";
-import { FaHtml5, FaCss3Alt, FaJs, FaReact, FaNodeJs } from "react-icons/fa";
+import { FaHtml5, FaCss3Alt, FaJs, FaReact, FaNodeJs, FaPython, FaBrain } from "react-icons/fa";
 import { SiTailwindcss, SiMongodb, SiExpress, SiFlutter } from "react-icons/si";
 
 function SkillsSection() {
@@ -54,6 +54,16 @@ function SkillsSection() {
     name: "Flutter", 
     icon: <SiFlutter className="text-sky-400 text-5xl" />, 
     description: "Flutter is Google's open-source UI toolkit for building natively compiled applications from a single codebase. It empowers developers to create beautiful, fast experiences for mobile, web and desktop." 
+  },
+  { 
+    name: "Python", 
+    icon: <FaPython className="text-yellow-500 text-5xl" />, 
+    description: "Python is a versatile, high-level programming language known for its simplicity and readability. It is widely used in web development, data science, machine learning, automation, and scripting, making it one of the most popular languages in the world." 
+  },
+  { 
+    name: "AI Prompt Engineering", 
+    icon: <FaBrain className="text-indigo-500 text-5xl" />, 
+    description: "Designing and refining prompts to get accurate, consistent, and high-quality outputs from large language models. Involves prompt patterns, testing, and evaluation for tasks like summarization, code generation, and conversational UX." 
   },
 ];
 

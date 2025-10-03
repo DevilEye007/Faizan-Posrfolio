@@ -3,6 +3,13 @@ import { RevealOnScroll } from "../RevealOnScroll";
 export const Projects = () => {
   const webProjects = [
     {
+      title: "AI Content Generator",
+      description:
+        "AI-powered content & SEO writer that helps you generate engaging blog posts, ads, and social captions. Boosts creativity and saves time with smart, high-quality content suggestions.",
+      tech: ["HTML", "TailwindCSS", "JavaScript", "Python", "FlaskAPI"],
+      link: "https://gacg.vercel.app//",
+    },
+    {
       title: "E-Commerce Store",
       description:
         "Roucha Cielo is a modern online fashion store built for seamless shopping, featuring real-time cart updates, secure checkout, and elegant UI.",
