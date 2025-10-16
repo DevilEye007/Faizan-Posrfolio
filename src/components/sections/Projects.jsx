@@ -56,6 +56,16 @@ export const Projects = () => {
     },
   ];
 
+  const desktopApplication = [
+    {
+      title: "Inventory Management System",
+      description:
+        "A desktop application to efficiently manage and track inventory levels, orders, sales, and deliveries with a user-friendly interface.",
+      tech: ["PYQT5", "SQLite"],
+      link: "https://github.com/DevilEye007/Inventory-Management-System/releases/download/v1.0.0/main_window.exe",
+    },
+  ];
+
   const renderProjectCard = (project, index) => (
     <div
       key={index}
@@ -82,6 +92,36 @@ export const Projects = () => {
         className="text-red-300 hover:text-white text-sm font-semibold inline-flex items-center gap-1 transition-all hover:underline"
       >
         View Project →
+      </a>
+    </div>
+  );
+
+  const renderProjectCardDA = (project, index) => (
+    <div
+      key={index}
+      className="bg-white/5 border border-red-500/20 rounded-2xl p-6 shadow-lg hover:shadow-red-500/30 transition-all duration-300 hover:-translate-y-1 backdrop-blur-md"
+    >
+      <h3 className="text-2xl font-bold text-red-400 mb-2">{project.title}</h3>
+      <p className="text-gray-300 text-sm mb-5 leading-relaxed text-justify">
+        {project.description}
+      </p>
+      <div className="flex flex-wrap gap-2 mb-4">
+        {project.tech.map((tech, key) => (
+          <span
+            key={key}
+            className="bg-red-500/10 text-red-300 py-1 px-3 rounded-full text-xs font-medium hover:bg-red-500/20 transition-all"
+          >
+            {tech}
+          </span>
+        ))}
+      </div>
+      <a
+        href={project.link}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-red-300 hover:text-white text-sm font-semibold inline-flex items-center gap-1 transition-all hover:underline"
+      >
+        Download for Experience →
       </a>
     </div>
   );
@@ -113,12 +153,22 @@ export const Projects = () => {
           </div>
 
           {/* Gaming Projects */}
-          <div>
+          <div className="mb-16">
             <h3 className="text-2xl font-bold text-red-500 mb-6 border-b border-red-500/30 pb-2">
               Mini Games
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {gamingProjects.map(renderProjectCard)}
+            </div>
+          </div>
+
+          {/* Desktop Application Projects */}
+          <div>
+            <h3 className="text-2xl font-bold text-red-500 mb-6 border-b border-red-500/30 pb-2">
+              Desktop Management Software
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {desktopApplication.map(renderProjectCardDA)}
             </div>
           </div>
         </div>
