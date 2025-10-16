@@ -74,6 +74,7 @@ export const About = () => {
   const frontendSkills = ["ReactJS", "Kotlin", "Flutter"];
   const backendSkills = ["Node.js", "Python", "MongoDB"];
   const graphicDesigning = ["Adobe Illustrator", "Adobe Photoshop", "Figma", "Corel Draw"];
+  const desktopApplication = ["Python pyqt5", "C# .NET"];
 
   const certificates = [
     {
@@ -126,6 +127,7 @@ export const About = () => {
                   <SkillCard title="Frontend" skills={frontendSkills} />
                   <SkillCard title="Backend" skills={backendSkills} />
                   <SkillCard title="Graphic Designing" skills={graphicDesigning} />
+                  <SkillCard title="Desktop Application Development" skills={desktopApplication} />
                 </div>
               </div>
             </div>
