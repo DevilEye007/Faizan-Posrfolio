@@ -1,4 +1,7 @@
 import { RevealOnScroll } from "../RevealOnScroll";
+import Invertorry from "../../assets/DA/INV.png";
+import DataAnalytics from "../../assets/DA/DATA.png";
+import CRM from "../../assets/DA/CRM.png";
 
 export const Projects = () => {
   const webProjects = [
@@ -63,6 +66,23 @@ export const Projects = () => {
         "A desktop application to efficiently manage and track inventory levels, orders, sales, and deliveries with a user-friendly interface.",
       tech: ["PYQT5", "SQLite"],
       link: "https://github.com/DevilEye007/Inventory-Management-System/releases/download/v1.0.0/main_window.exe",
+      image: Invertorry,
+    },
+    {
+      title: "Data Analytics Dashboard",
+      description:
+        "A comprehensive desktop dashboard for visualizing and analyzing data through interactive charts and graphs, aiding in informed decision-making.",
+      tech: ["PYQT5", "Charts", "Data Science Tool"],
+      link: "https://github.com/DevilEye007/Data-Analytics-Dashboard/releases/download/Data-Analytics-Dashboard/Data.Analytics.Dashboard.exe",
+      image: DataAnalytics,
+    },
+    {
+      title: "CRM System",
+      description:
+        "A customer relationship management (CRM) desktop application designed to help businesses manage interactions with current and potential customers effectively.",
+      tech: ["PYQT5", "Charts","SQLite"],
+      link: "https://github.com/DevilEye007/CRM-System/releases/download/CRM_Prov1.0.0/CRM.Pro.exe",
+      image: CRM,
     },
   ];
 
@@ -96,35 +116,50 @@ export const Projects = () => {
     </div>
   );
 
-  const renderProjectCardDA = (project, index) => (
-    <div
-      key={index}
-      className="bg-white/5 border border-red-500/20 rounded-2xl p-6 shadow-lg hover:shadow-red-500/30 transition-all duration-300 hover:-translate-y-1 backdrop-blur-md"
-    >
-      <h3 className="text-2xl font-bold text-red-400 mb-2">{project.title}</h3>
-      <p className="text-gray-300 text-sm mb-5 leading-relaxed text-justify">
-        {project.description}
-      </p>
-      <div className="flex flex-wrap gap-2 mb-4">
-        {project.tech.map((tech, key) => (
-          <span
-            key={key}
-            className="bg-red-500/10 text-red-300 py-1 px-3 rounded-full text-xs font-medium hover:bg-red-500/20 transition-all"
-          >
-            {tech}
-          </span>
-        ))}
+const renderProjectCardDA = (project, index) => (
+  <div
+    key={index}
+    className="bg-white/5 border border-red-500/20 rounded-2xl p-6 shadow-lg hover:shadow-red-500/30 transition-all duration-300 hover:-translate-y-1 backdrop-blur-md"
+  >
+    {/* Project Screenshot */}
+    {project.image && (
+      <div className="mb-4">
+        <img
+          src={project.image}
+          alt={`${project.title} Screenshot`}
+          className="w-full h-35 object-cover rounded-lg border border-red-500/10 shadow-md hover:shadow-red-500/20 transition-all"
+        />
       </div>
-      <a
-        href={project.link}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-red-300 hover:text-white text-sm font-semibold inline-flex items-center gap-1 transition-all hover:underline"
-      >
-        Download for Experience →
-      </a>
+    )}
+
+    <h3 className="text-2xl font-bold text-red-400 mb-2">{project.title}</h3>
+
+    <p className="text-gray-300 text-sm mb-5 leading-relaxed text-justify">
+      {project.description}
+    </p>
+
+    <div className="flex flex-wrap gap-2 mb-4">
+      {project.tech.map((tech, key) => (
+        <span
+          key={key}
+          className="bg-red-500/10 text-red-300 py-1 px-3 rounded-full text-xs font-medium hover:bg-red-500/20 transition-all"
+        >
+          {tech}
+        </span>
+      ))}
     </div>
-  );
+
+    <a
+      href={project.link}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-red-300 hover:text-white text-sm font-semibold inline-flex items-center gap-1 transition-all hover:underline"
+    >
+      Download for Experience →
+    </a>
+  </div>
+);
+
 
   return (
     <section
