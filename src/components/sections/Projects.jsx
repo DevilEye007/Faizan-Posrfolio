@@ -16,7 +16,7 @@ export const Projects = () => {
       title: "AI Quiz Generator",
       description:
         "An AI-driven quiz generator that creates customized quizzes based on user-defined topics and difficulty levels, perfect for educators and learners.",
-      tech: ["HTML", "TailwindCSS", "JavaScript", "Python", "FlaskAPI", "Gemini Prompt"],
+      tech: ["HTML", "TailwindCSS", "JavaScript", "Python", "Gemini Prompt"],
       link: "https://neuro-quiz.vercel.app/",
     },
     {
