@@ -10,7 +10,14 @@ export const Projects = () => {
       description:
         "AI-powered content & SEO writer that helps you generate engaging blog posts, ads, and social captions. Boosts creativity and saves time with smart, high-quality content suggestions.",
       tech: ["HTML", "TailwindCSS", "JavaScript", "Python", "FlaskAPI"],
-      link: "https://gacg.vercel.app//",
+      link: "https://gacg.vercel.app/",
+    },
+    {
+      title: "AI Quiz Generator",
+      description:
+        "An AI-driven quiz generator that creates customized quizzes based on user-defined topics and difficulty levels, perfect for educators and learners.",
+      tech: ["HTML", "TailwindCSS", "JavaScript", "Python", "FlaskAPI", "Gemini Prompt"],
+      link: "https://neuro-quiz.vercel.app/",
     },
     {
       title: "E-Commerce Store",
