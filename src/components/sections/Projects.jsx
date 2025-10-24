@@ -92,6 +92,15 @@ export const Projects = () => {
       image: CRM,
     },
   ];
+  const mobileApplication = [
+    {
+      title: "Expense Tracker Mobile App",
+      description:
+        "An intuitive mobile app to help users track their daily expenses, categorize spending, and visualize financial habits with easy-to-use features.",
+      tech: ["Flutter", "Dart", "SQLite"],
+      link: "https://github.com/DevilEye007/Fin-Track/releases/download/Expence_Tracker/app-release.apk",
+    },
+  ];
 
   const renderProjectCard = (project, index) => (
     <div
@@ -183,6 +192,14 @@ const renderProjectCardDA = (project, index) => (
             interactive browser games built with modern frameworks, clean code,
             and a passion for design.
           </p>
+          <div>
+            <h3 className="text-2xl font-bold text-red-500 mb-6 border-b border-red-500/30 pb-2">
+              Andriod Applications
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {mobileApplication.map(renderProjectCardDA)}
+            </div>
+          </div>
 
           {/* Web Projects */}
           <div className="mb-16">
