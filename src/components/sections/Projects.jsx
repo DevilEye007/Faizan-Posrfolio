@@ -93,16 +93,6 @@ export const Projects = () => {
     },
   ];
 
-  const mobileApplication = [
-    {
-      title: "Expense Tracker Mobile App",
-      description:
-        "An intuitive mobile app to help users track their daily expenses, categorize spending, and visualize financial habits with easy-to-use features.",
-      tech: ["Flutter", "Dart", "SQLite"],
-      link: "https://github.com/DevilEye007/Fin-Track/releases/download/Expence_Tracker/app-release.apk",
-    },
-  ];
-
   const renderProjectCard = (project, index) => (
     <div
       key={index}
@@ -172,40 +162,10 @@ export const Projects = () => {
     </div>
   );
 
-  const renderProjectCardMob = (project, index) => (
-    <div
-      key={index}
-      className="bg-white/5 border border-red-500/20 rounded-2xl p-6 shadow-lg hover:shadow-red-500/30 transition-all duration-300 hover:-translate-y-1 backdrop-blur-md"
-    >
-      <h3 className="text-2xl font-bold text-red-400 mb-2">{project.title}</h3>
-      <p className="text-gray-300 text-sm mb-5 leading-relaxed text-justify">
-        {project.description}
-      </p>
-      <div className="flex flex-wrap gap-2 mb-4">
-        {project.tech.map((tech, key) => (
-          <span
-            key={key}
-            className="bg-red-500/10 text-red-300 py-1 px-3 rounded-full text-xs font-medium hover:bg-red-500/20 transition-all"
-          >
-            {tech}
-          </span>
-        ))}
-      </div>
-      <a
-        href={project.link}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-red-300 hover:text-white text-sm font-semibold inline-flex items-center gap-1 transition-all hover:underline"
-      >
-        Download Application →
-      </a>
-    </div>
-  );
-
   return (
     <section
       id="projects"
-      className="min-h-screen md:flex md:items-center md:justify-center py-12 md:py-20 bg-black text-white"
+      className="min-h-screen flex flex-col items-center justify-center py-12 md:py-20 bg-black text-white"
     >
       <RevealOnScroll>
         <div className="max-w-6xl mx-auto px-4">
@@ -217,16 +177,6 @@ export const Projects = () => {
             interactive browser games built with modern frameworks, clean code,
             and a passion for design.
           </p>
-
-          {/* Mobile Applications */}
-          <div className="mb-12">
-            <h3 className="text-2xl font-bold text-red-500 mb-6 border-b border-red-500/30 pb-2">
-              Android Applications
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {mobileApplication.map(renderProjectCardMob)}
-            </div>
-          </div>
 
           {/* Web Applications */}
           <div className="mb-16">
