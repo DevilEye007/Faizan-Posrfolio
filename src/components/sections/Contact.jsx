@@ -65,12 +65,6 @@ export const Contact = () => {
         <source src={BGVideo} type="video/mp4" />
         Your browser does not support the video tag.
       </video>
-      <div
-        className="absolute top-0 left-0 w-full h-full bg-cover bg-center sm:hidden z-0"
-        style={{
-          backgroundImage: "url('/fallback-bg.jpg')", // Place fallback-bg.jpg in public folder
-        }}
-      />
 
       {/* ✅ Overlay */}
       <div className="absolute top-0 left-0 w-full h-full bg-black/70 z-0" />
