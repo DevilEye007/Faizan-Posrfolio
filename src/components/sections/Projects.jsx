@@ -204,10 +204,9 @@ export const Projects = () => {
 
   return (
     <section
-  id="projects"
-  className="min-h-screen flex flex-col items-center justify-center py-12 md:py-20 bg-black text-white"
->
-
+      id="projects"
+      className="min-h-screen md:flex md:items-center md:justify-center py-12 md:py-20 bg-black text-white"
+    >
       <RevealOnScroll>
         <div className="max-w-6xl mx-auto px-4">
           <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-4 bg-gradient-to-r from-red-600 to-red-400 text-transparent bg-clip-text drop-shadow-lg">
