@@ -10,8 +10,12 @@ import { Contact } from "./components/sections/Contact";
 import { Footer } from "./components/sections/Footer";
 import Rev from './components/sections/Review'
 import SkillsSection from "./components/sections/Skills";
+import { inject } from '@vercel/analytics'
 
 function App() {
+  useEffect(() => {
+    inject()
+  }, [])
   const [isLoaded, setIsLoaded] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
