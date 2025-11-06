@@ -2,6 +2,7 @@ import { RevealOnScroll } from "../RevealOnScroll";
 import Invertorry from "../../assets/DA/INV.png";
 import DataAnalytics from "../../assets/DA/DATA.png";
 import CRM from "../../assets/DA/CRM.png";
+import { Helmet } from "react-helmet";
 
 export const Projects = () => {
   const webProjects = [
@@ -215,6 +216,10 @@ const renderProjectCardMob = (project, index) => (
       id="projects"
       className="min-h-screen flex items-center justify-center py-20 bg-black text-white"
     >
+        <Helmet>
+          <title>Projects | Faizan Sultan Portfolio</title>
+          <meta name="description" content="Explore Faizan Sultan's ReactJS projects including web apps, UI designs, and frontend work." />
+        </Helmet>
         <div className="max-w-6xl mx-auto px-4">
           <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-4 bg-gradient-to-r from-red-600 to-red-400 text-transparent bg-clip-text drop-shadow-lg">
             Projects
