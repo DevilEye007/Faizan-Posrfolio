@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://faizan-posrfolio.vercel.app/sitemap.xml
