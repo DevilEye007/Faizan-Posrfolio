@@ -2,7 +2,7 @@ import { RevealOnScroll } from "../RevealOnScroll";
 import Invertorry from "../../assets/DA/INV.png";
 import DataAnalytics from "../../assets/DA/DATA.png";
 import CRM from "../../assets/DA/CRM.png";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 
 export const Projects = () => {
   const webProjects = [
