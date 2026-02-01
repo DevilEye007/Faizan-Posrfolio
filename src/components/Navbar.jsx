@@ -14,10 +14,10 @@ export const Navbar = ({ menuOpen, setMenuOpen }) => {
             href="#home"
             className="font-mono text-3xl font-bold text-white tracking-tight transition hover:scale-105 duration-200"
           >
-            Des
             <span className="bg-gradient-to-r from-red-500 to-red-400 text-transparent bg-clip-text">
-              Log
+              DESLOG {" "}
             </span>
+             Digital Solutions
           </a>
 
           {/* Hamburger Menu for Mobile */}
