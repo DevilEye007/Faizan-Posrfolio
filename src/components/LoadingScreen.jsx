@@ -8,7 +8,7 @@ export const LoadingScreen = ({ onComplete }) => {
     let index = 0;
     const interval = setInterval(() => {
       setText(fullText.substring(0, index));
-      ++index;
+      index++;
 
       if (index > fullText.length) {
         clearInterval(interval);
@@ -29,8 +29,23 @@ export const LoadingScreen = ({ onComplete }) => {
 
       {/* Progress Bar Container */}
       <div className="w-64 h-2 rounded-full bg-white/10 overflow-hidden relative">
-        <div className="absolute h-full w-full bg-gradient-to-r from-red-500 via-red-400 to-red-600 animate-progress-glow" />
+        <div className="absolute h-full w-0 bg-gradient-to-r from-red-500 via-red-400 to-red-600 animate-loading-bar rounded-full" />
       </div>
+
+      {/* Tailwind CSS Keyframes (Add to tailwind.config.js) */}
+      <style>
+        {`
+          @keyframes loading-bar {
+            0% { width: 0%; }
+            50% { width: 70%; }
+            100% { width: 100%; }
+          }
+
+          .animate-loading-bar {
+            animation: loading-bar 2.5s ease-in-out forwards;
+          }
+        `}
+      </style>
     </div>
   );
 };
