@@ -106,168 +106,346 @@ export const Projects = () => {
   const renderProjectCard = (project, index) => (
     <div
       key={index}
-      className="bg-white/5 border border-red-500/20 rounded-2xl p-6 shadow-lg hover:shadow-red-500/30 transition-all duration-300 hover:-translate-y-1 backdrop-blur-md"
+      className="relative group rounded-2xl bg-[#1a1a1a] shadow-[8px_8px_20px_#0f0f0f,-8px_-8px_20px_#252525] hover:shadow-[4px_4px_12px_#0f0f0f,-4px_-4px_12px_#252525] hover:-translate-y-2 transition-all duration-300"
     >
-      <h3 className="text-2xl font-bold text-red-400 mb-2">{project.title}</h3>
-      <p className="text-gray-300 text-sm mb-5 leading-relaxed text-justify">
-        {project.description}
-      </p>
-      <div className="flex flex-wrap gap-2 mb-4">
-        {project.tech.map((tech, key) => (
-          <span
-            key={key}
-            className="bg-red-500/10 text-red-300 py-1 px-3 rounded-full text-xs font-medium hover:bg-red-500/20 transition-all"
-          >
-            {tech}
-          </span>
-        ))}
+      {/* Neomorphic Top Highlight */}
+      <div className="absolute inset-x-4 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent rounded-full"></div>
+      
+      {/* Neomorphic Inner Glow */}
+      <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-red-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+      
+      {/* Neomorphic Border Glow on Hover */}
+      <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-r from-red-500/0 via-red-500/20 to-red-500/0 opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-500"></div>
+      
+      <div className="relative p-6 rounded-2xl bg-[#1a1a1a] transition-all duration-300 group-hover:bg-[#1e1e1e]">
+        <h3 className="text-2xl font-bold text-red-400 mb-2 group-hover:text-red-300 transition-colors duration-300">
+          {project.title}
+        </h3>
+        <p className="text-gray-300 text-sm mb-5 leading-relaxed text-justify">
+          {project.description}
+        </p>
+        <div className="flex flex-wrap gap-2 mb-4">
+          {project.tech.map((tech, key) => (
+            <span
+              key={key}
+              className="relative px-3 py-1 rounded-full text-xs font-medium text-red-300 transition-all duration-300
+                bg-[#1a1a1a]
+                shadow-[inset_2px_2px_6px_#0f0f0f,inset_-2px_-2px_6px_#252525]
+                hover:shadow-[inset_1px_1px_3px_#0f0f0f,inset_-1px_-1px_3px_#252525]
+                hover:text-white hover:scale-105
+                group/tech"
+            >
+              <span className="absolute inset-0 rounded-full bg-gradient-to-b from-red-500/10 to-transparent opacity-0 group-hover/tech:opacity-100 transition-opacity duration-300"></span>
+              <span className="relative">{tech}</span>
+            </span>
+          ))}
+        </div>
+        <a
+          href={project.link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="relative inline-flex items-center gap-1 text-sm font-semibold text-red-400 hover:text-white transition-all duration-300 group/link"
+        >
+          View Project →
+          <span className="absolute -bottom-0.5 left-0 w-0 h-[1px] bg-red-400 group-hover/link:w-full transition-all duration-300"></span>
+        </a>
       </div>
-      <a
-        href={project.link}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-red-300 hover:text-white text-sm font-semibold inline-flex items-center gap-1 transition-all hover:underline"
-      >
-        View Project →
-      </a>
     </div>
   );
 
-const renderProjectCardDA = (project, index) => (
-  <div
-    key={index}
-    className="bg-white/5 border border-red-500/20 rounded-2xl p-6 shadow-lg hover:shadow-red-500/30 transition-all duration-300 hover:-translate-y-1 backdrop-blur-md"
-  >
-    {/* Project Screenshot */}
-    {project.image && (
-      <div className="mb-4">
-        <img
-          src={project.image}
-          alt={`${project.title} Screenshot`}
-          className="w-full h-35 object-cover rounded-lg border border-red-500/10 shadow-md hover:shadow-red-500/20 transition-all"
-        />
+  const renderProjectCardDA = (project, index) => (
+    <div
+      key={index}
+      className="relative group rounded-2xl bg-[#1a1a1a] shadow-[8px_8px_20px_#0f0f0f,-8px_-8px_20px_#252525] hover:shadow-[4px_4px_12px_#0f0f0f,-4px_-4px_12px_#252525] hover:-translate-y-2 transition-all duration-300"
+    >
+      {/* Neomorphic Top Highlight */}
+      <div className="absolute inset-x-4 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent rounded-full"></div>
+      
+      {/* Neomorphic Inner Glow */}
+      <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-red-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+      
+      {/* Neomorphic Border Glow on Hover */}
+      <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-r from-red-500/0 via-red-500/20 to-red-500/0 opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-500"></div>
+      
+      <div className="relative p-6 rounded-2xl bg-[#1a1a1a] transition-all duration-300 group-hover:bg-[#1e1e1e]">
+        
+        {/* Project Screenshot with Neomorphic Frame */}
+        {project.image && (
+          <div className="relative mb-4 rounded-xl overflow-hidden
+            bg-[#1a1a1a]
+            shadow-[inset_3px_3px_8px_#0f0f0f,inset_-3px_-3px_8px_#252525]
+            group-hover:shadow-[inset_2px_2px_4px_#0f0f0f,inset_-2px_-2px_4px_#252525]
+            transition-all duration-300">
+            <img
+              src={project.image}
+              alt={`${project.title} Screenshot`}
+              className="w-full h-35 object-cover rounded-xl transition-transform duration-700 group-hover:scale-105"
+            />
+            {/* Neomorphic Overlay on Image */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#1a1a1a]/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          </div>
+        )}
+
+        <h3 className="text-2xl font-bold text-red-400 mb-2 group-hover:text-red-300 transition-colors duration-300">
+          {project.title}
+        </h3>
+
+        <p className="text-gray-300 text-sm mb-5 leading-relaxed text-justify">
+          {project.description}
+        </p>
+
+        <div className="flex flex-wrap gap-2 mb-4">
+          {project.tech.map((tech, key) => (
+            <span
+              key={key}
+              className="relative px-3 py-1 rounded-full text-xs font-medium text-red-300 transition-all duration-300
+                bg-[#1a1a1a]
+                shadow-[inset_2px_2px_6px_#0f0f0f,inset_-2px_-2px_6px_#252525]
+                hover:shadow-[inset_1px_1px_3px_#0f0f0f,inset_-1px_-1px_3px_#252525]
+                hover:text-white hover:scale-105
+                group/tech"
+            >
+              <span className="absolute inset-0 rounded-full bg-gradient-to-b from-red-500/10 to-transparent opacity-0 group-hover/tech:opacity-100 transition-opacity duration-300"></span>
+              <span className="relative">{tech}</span>
+            </span>
+          ))}
+        </div>
+
+        <a
+          href={project.link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="relative inline-flex items-center gap-1 text-sm font-semibold text-red-400 hover:text-white transition-all duration-300 group/link"
+        >
+          Download for Experience →
+          <span className="absolute -bottom-0.5 left-0 w-0 h-[1px] bg-red-400 group-hover/link:w-full transition-all duration-300"></span>
+        </a>
       </div>
-    )}
-
-    <h3 className="text-2xl font-bold text-red-400 mb-2">{project.title}</h3>
-
-    <p className="text-gray-300 text-sm mb-5 leading-relaxed text-justify">
-      {project.description}
-    </p>
-
-    <div className="flex flex-wrap gap-2 mb-4">
-      {project.tech.map((tech, key) => (
-        <span
-          key={key}
-          className="bg-red-500/10 text-red-300 py-1 px-3 rounded-full text-xs font-medium hover:bg-red-500/20 transition-all"
-        >
-          {tech}
-        </span>
-      ))}
     </div>
+  );
 
-    <a
-      href={project.link}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="text-red-300 hover:text-white text-sm font-semibold inline-flex items-center gap-1 transition-all hover:underline"
+  const renderProjectCardMob = (project, index) => (
+    <div
+      key={index}
+      className="relative group rounded-2xl bg-[#1a1a1a] shadow-[8px_8px_20px_#0f0f0f,-8px_-8px_20px_#252525] hover:shadow-[4px_4px_12px_#0f0f0f,-4px_-4px_12px_#252525] hover:-translate-y-2 transition-all duration-300"
     >
-      Download for Experience →
-    </a>
-  </div>
-);
+      {/* Neomorphic Top Highlight */}
+      <div className="absolute inset-x-4 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent rounded-full"></div>
+      
+      {/* Neomorphic Inner Glow */}
+      <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-red-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+      
+      {/* Neomorphic Border Glow on Hover */}
+      <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-r from-red-500/0 via-red-500/20 to-red-500/0 opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-500"></div>
+      
+      <div className="relative p-6 rounded-2xl bg-[#1a1a1a] transition-all duration-300 group-hover:bg-[#1e1e1e]">
+        
+        {/* Mobile App Icon Badge */}
+        <div className="absolute top-4 right-4 px-3 py-1 rounded-full text-xs font-medium text-white
+          bg-[#1a1a1a]
+          shadow-[inset_2px_2px_6px_#0f0f0f,inset_-2px_-2px_6px_#252525]
+          border border-green-500/20">
+          📱 Mobile
+        </div>
 
-const renderProjectCardMob = (project, index) => (
-  <div
-    key={index}
-    className="bg-white/5 border border-red-500/20 rounded-2xl p-6 shadow-lg hover:shadow-red-500/30 transition-all duration-300 hover:-translate-y-1 backdrop-blur-md"
-  >
-    <h3 className="text-2xl font-bold text-red-400 mb-2">{project.title}</h3>
+        <h3 className="text-2xl font-bold text-red-400 mb-2 group-hover:text-red-300 transition-colors duration-300">
+          {project.title}
+        </h3>
 
-    <p className="text-gray-300 text-sm mb-5 leading-relaxed text-justify">
-      {project.description}
-    </p>
+        <p className="text-gray-300 text-sm mb-5 leading-relaxed text-justify">
+          {project.description}
+        </p>
 
-    <div className="flex flex-wrap gap-2 mb-4">
-      {project.tech.map((tech, key) => (
-        <span
-          key={key}
-          className="bg-red-500/10 text-red-300 py-1 px-3 rounded-full text-xs font-medium hover:bg-red-500/20 transition-all"
+        <div className="flex flex-wrap gap-2 mb-4">
+          {project.tech.map((tech, key) => (
+            <span
+              key={key}
+              className="relative px-3 py-1 rounded-full text-xs font-medium text-red-300 transition-all duration-300
+                bg-[#1a1a1a]
+                shadow-[inset_2px_2px_6px_#0f0f0f,inset_-2px_-2px_6px_#252525]
+                hover:shadow-[inset_1px_1px_3px_#0f0f0f,inset_-1px_-1px_3px_#252525]
+                hover:text-white hover:scale-105
+                group/tech"
+            >
+              <span className="absolute inset-0 rounded-full bg-gradient-to-b from-red-500/10 to-transparent opacity-0 group-hover/tech:opacity-100 transition-opacity duration-300"></span>
+              <span className="relative">{tech}</span>
+            </span>
+          ))}
+        </div>
+
+        <a
+          href={project.link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="relative inline-flex items-center gap-1 text-sm font-semibold text-red-400 hover:text-white transition-all duration-300 group/link"
         >
-          {tech}
-        </span>
-      ))}
+          Download Application →
+          <span className="absolute -bottom-0.5 left-0 w-0 h-[1px] bg-red-400 group-hover/link:w-full transition-all duration-300"></span>
+        </a>
+      </div>
     </div>
-
-    <a
-      href={project.link}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="text-red-300 hover:text-white text-sm font-semibold inline-flex items-center gap-1 transition-all hover:underline"
-    >
-      Download Application →
-    </a>
-  </div>
-);
-
+  );
 
   return (
     <section
       id="projects"
-      className="min-h-screen flex items-center justify-center py-20 bg-black text-white"
+      className="min-h-screen flex items-center justify-center py-20 bg-[#1a1a1a] text-white relative overflow-hidden"
     >
-        <Helmet>
-          <title>Projects | Faizan Sultan Portfolio</title>
-          <meta name="description" content="Explore Faizan Sultan's ReactJS projects including web apps, UI designs, and frontend work." />
-        </Helmet>
-        <div className="max-w-6xl mx-auto px-4">
-          <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-4 bg-gradient-to-r from-red-600 to-red-400 text-transparent bg-clip-text drop-shadow-lg">
-            Projects
+      {/* Neomorphic Background Pattern */}
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-[#1a1a1a]"></div>
+        
+        {/* Soft Ambient Glows */}
+        <div className="absolute w-[600px] h-[600px] bg-red-600/5 blur-[140px] rounded-full top-0 left-1/2 -translate-x-1/2"></div>
+        <div className="absolute w-[400px] h-[400px] bg-purple-600/5 blur-[120px] rounded-full bottom-0 right-0"></div>
+        <div className="absolute w-[300px] h-[300px] bg-blue-600/5 blur-[100px] rounded-full top-1/2 left-0"></div>
+        
+        {/* Neomorphic Grid Pattern */}
+        <div className="absolute inset-0 opacity-5" style={{
+          backgroundImage: `radial-gradient(circle at 1px 1px, #ffffff 1px, transparent 0)`,
+          backgroundSize: '40px 40px'
+        }}></div>
+      </div>
+
+      <Helmet>
+        <title>Projects | Faizan Sultan Portfolio</title>
+        <meta name="description" content="Explore Faizan Sultan's ReactJS projects including web apps, UI designs, and frontend work." />
+      </Helmet>
+      
+      <div className="max-w-6xl mx-auto px-4 relative z-10">
+        
+        {/* Heading with Neomorphic Design */}
+        <div className="text-center mb-12">
+          <h2 className="text-4xl md:text-5xl font-extrabold mb-4 relative inline-block">
+            <span className="bg-gradient-to-r from-red-500 via-red-400 to-orange-400 bg-clip-text text-transparent">
+              Projects
+            </span>
+            {/* Neomorphic Underline */}
+            <span className="absolute -bottom-3 left-0 w-full h-[3px] rounded-full bg-[#1a1a1a] shadow-[inset_1px_1px_3px_#0f0f0f,inset_-1px_-1px_3px_#252525]"></span>
+            <span className="absolute -bottom-3 left-0 w-full h-[3px] rounded-full bg-gradient-to-r from-red-500/0 via-red-500/30 to-red-500/0 blur-[2px]"></span>
           </h2>
-          <p className="text-center text-gray-400 mb-12 text-base max-w-3xl mx-auto">
+
+          <p className="text-gray-400 text-base max-w-3xl mx-auto relative inline-block px-6 py-2 rounded-full
+            bg-[#1a1a1a]
+            shadow-[inset_2px_2px_6px_#0f0f0f,inset_-2px_-2px_6px_#252525]">
             A showcase of my latest creations from full-stack web apps to
             interactive browser games built with modern frameworks, clean code,
             and a passion for design.
           </p>
-          <div className="mb-16">
-            <h3 className="text-2xl font-bold text-red-500 mb-6 border-b border-red-500/30 pb-2">
-              Andriod Applications
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {mobileApplication.map(renderProjectCardMob)}
-            </div>
-          </div>
+        </div>
 
-          {/* Web Projects */}
-          <div className="mb-16">
-            <h3 className="text-2xl font-bold text-red-500 mb-6 border-b border-red-500/30 pb-2">
-              Web Applications
+        {/* Android Applications */}
+        <div className="mb-16">
+          <div className="relative inline-block mb-6">
+            <h3 className="text-2xl font-bold text-red-400 relative">
+              📱 Android Applications
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {webProjects.map(renderProjectCard)}
-            </div>
+            {/* Neomorphic Underline */}
+            <span className="absolute -bottom-2 left-0 w-full h-[2px] rounded-full bg-[#1a1a1a] shadow-[inset_1px_1px_2px_#0f0f0f,inset_-1px_-1px_2px_#252525]"></span>
+            <span className="absolute -bottom-2 left-0 w-full h-[2px] rounded-full bg-gradient-to-r from-red-500/0 via-red-500/30 to-red-500/0 blur-[1px]"></span>
           </div>
-
-          {/* Gaming Projects */}
-          <div className="mb-16">
-            <h3 className="text-2xl font-bold text-red-500 mb-6 border-b border-red-500/30 pb-2">
-              Mini Games
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {gamingProjects.map(renderProjectCard)}
-            </div>
-          </div>
-
-          {/* Desktop Application Projects */}
-          <div>
-            <h3 className="text-2xl font-bold text-red-500 mb-6 border-b border-red-500/30 pb-2">
-              Desktop Management Software
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {desktopApplication.map(renderProjectCardDA)}
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {mobileApplication.map(renderProjectCardMob)}
           </div>
         </div>
+
+        {/* Web Projects */}
+        <div className="mb-16">
+          <div className="relative inline-block mb-6">
+            <h3 className="text-2xl font-bold text-red-400 relative">
+              🌐 Web Applications
+            </h3>
+            <span className="absolute -bottom-2 left-0 w-full h-[2px] rounded-full bg-[#1a1a1a] shadow-[inset_1px_1px_2px_#0f0f0f,inset_-1px_-1px_2px_#252525]"></span>
+            <span className="absolute -bottom-2 left-0 w-full h-[2px] rounded-full bg-gradient-to-r from-red-500/0 via-red-500/30 to-red-500/0 blur-[1px]"></span>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {webProjects.map(renderProjectCard)}
+          </div>
+        </div>
+
+        {/* Gaming Projects */}
+        <div className="mb-16">
+          <div className="relative inline-block mb-6">
+            <h3 className="text-2xl font-bold text-red-400 relative">
+              🎮 Mini Games
+            </h3>
+            <span className="absolute -bottom-2 left-0 w-full h-[2px] rounded-full bg-[#1a1a1a] shadow-[inset_1px_1px_2px_#0f0f0f,inset_-1px_-1px_2px_#252525]"></span>
+            <span className="absolute -bottom-2 left-0 w-full h-[2px] rounded-full bg-gradient-to-r from-red-500/0 via-red-500/30 to-red-500/0 blur-[1px]"></span>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {gamingProjects.map(renderProjectCard)}
+          </div>
+        </div>
+
+        {/* Desktop Application Projects */}
+        <div>
+          <div className="relative inline-block mb-6">
+            <h3 className="text-2xl font-bold text-red-400 relative">
+              💻 Desktop Management Software
+            </h3>
+            <span className="absolute -bottom-2 left-0 w-full h-[2px] rounded-full bg-[#1a1a1a] shadow-[inset_1px_1px_2px_#0f0f0f,inset_-1px_-1px_2px_#252525]"></span>
+            <span className="absolute -bottom-2 left-0 w-full h-[2px] rounded-full bg-gradient-to-r from-red-500/0 via-red-500/30 to-red-500/0 blur-[1px]"></span>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {desktopApplication.map(renderProjectCardDA)}
+          </div>
+        </div>
+      </div>
+
+      {/* Global Neomorphic Styles */}
+      <style jsx>{`
+        /* Neomorphic Base */
+        .neu-base {
+          background: #1a1a1a;
+          border-radius: 1rem;
+        }
+        
+        /* Neomorphic Extruded */
+        .neu-extruded {
+          box-shadow: 8px 8px 20px #0f0f0f, -8px -8px 20px #252525;
+        }
+        
+        /* Neomorphic Inset */
+        .neu-inset {
+          box-shadow: inset 4px 4px 12px #0f0f0f, inset -4px -4px 12px #252525;
+        }
+        
+        /* Neomorphic Pressed (Active State) */
+        .neu-pressed {
+          box-shadow: inset 6px 6px 16px #0f0f0f, inset -6px -6px 16px #252525;
+        }
+        
+        /* Smooth Transitions */
+        * {
+          transition: box-shadow 0.3s ease, background 0.3s ease, transform 0.3s ease;
+        }
+
+        /* Neomorphic Grid Pattern */
+        .neu-grid {
+          background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0);
+          background-size: 40px 40px;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+          width: 6px;
+        }
+        
+        ::-webkit-scrollbar-track {
+          background: #1a1a1a;
+          box-shadow: inset 1px 1px 3px #0f0f0f, inset -1px -1px 3px #252525;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+          background: #2a2a2a;
+          box-shadow: 2px 2px 4px #0f0f0f, -2px -2px 4px #252525;
+          border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+          background: #333;
+        }
+      `}</style>
     </section>
   );
 };
