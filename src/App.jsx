@@ -13,7 +13,7 @@ import { Footer } from "./components/sections/Footer";
 import SkillsSection from "./components/sections/Skills";
 import Rev from "./components/sections/Review";
 import { Helmet } from "react-helmet-async";
-import { inject } from "@vercel/analytics";
+import { Analytics } from "@vercel/analytics/react";
 import "./index.css";
 
 function App() {
@@ -21,8 +21,6 @@ function App() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    inject();
-
     AOS.init({
       duration: 1200,
       easing: "ease-out-cubic",
@@ -74,6 +72,7 @@ function App() {
 
         <Footer />
       </div>
+      <Analytics />
     </>
   );
 }
