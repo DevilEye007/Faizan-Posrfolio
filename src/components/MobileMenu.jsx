@@ -1,193 +1,267 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { FaTerminal, FaTimes, FaCodeBranch, FaWifi, FaLock } from "react-icons/fa";
+
+/* ============ Shared tokens ============ */
+const crtScreen = {
+  background: "radial-gradient(ellipse at 50% 40%, #0d1a14 0%, #081210 60%, #040808 100%)",
+  boxShadow: "inset 0 3px 8px rgba(0,0,0,0.95), inset 0 -1px 0 rgba(255,255,255,0.04), 0 1px 0 rgba(255,255,255,0.05)",
+};
+const scanlines = {
+  backgroundImage: "repeating-linear-gradient(0deg, rgba(255,255,255,0.06) 0px, rgba(255,255,255,0.06) 1px, transparent 1px, transparent 3px)",
+};
+const glowGreen = { color: "#4ade80", textShadow: "0 0 6px rgba(74,222,128,0.7)" };
+const glowAmber = { color: "#fbbf24", textShadow: "0 0 6px rgba(251,191,36,0.7)" };
+const glowCyan = { color: "#67e8f9", textShadow: "0 0 6px rgba(103,232,249,0.7)" };
+const glowRed = { color: "#f87171", textShadow: "0 0 6px rgba(248,113,113,0.7)" };
+const dim = { color: "#6b7c76" };
+const bodyText = { color: "#c8d4ce" };
+
+/* ============ LED ============ */
+const Led = ({ color = "green", pulse = false }) => {
+  const p = {
+    green: { hi: "#86efac", mid: "#22c55e", lo: "#14532d", g: "rgba(34,197,94,0.9)" },
+    amber: { hi: "#fcd34d", mid: "#f59e0b", lo: "#78350f", g: "rgba(245,158,11,0.9)" },
+    cyan: { hi: "#a5f3fc", mid: "#22d3ee", lo: "#155e75", g: "rgba(34,211,238,0.9)" },
+    red: { hi: "#ff9a9a", mid: "#ef4444", lo: "#7f1d1d", g: "rgba(239,68,68,0.9)" },
+  }[color];
+  return (
+    <span className="relative flex items-center justify-center w-2 h-2 shrink-0">
+      <span className="absolute inset-0 rounded-full bg-black/80 shadow-[inset_0_1px_2px_rgba(0,0,0,0.9)]" />
+      <span
+        className={`relative w-1.5 h-1.5 rounded-full ${pulse ? "animate-pulse" : ""}`}
+        style={{ background: `radial-gradient(circle at 30% 30%, ${p.hi}, ${p.mid} 50%, ${p.lo})`, boxShadow: `0 0 5px ${p.g}, inset 0 -1px 1px rgba(0,0,0,0.5)` }}
+      />
+    </span>
+  );
+};
 
 export const MobileMenu = ({ menuOpen, setMenuOpen }) => {
+  const [clock, setClock] = useState("");
+  const [uptime, setUptime] = useState(0);
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
   }, [menuOpen]);
 
-  const menuItems = ["Home", "About", "Skills", "Projects", "Reviews", "Contact"];
+  useEffect(() => {
+    if (!menuOpen) return;
+    const tick = () => {
+      const d = new Date();
+      setClock([d.getHours(), d.getMinutes(), d.getSeconds()].map((n) => String(n).padStart(2, "0")).join(":"));
+    };
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, [menuOpen]);
+
+  useEffect(() => {
+    if (!menuOpen) {
+      setUptime(0);
+      return;
+    }
+    const start = Date.now();
+    const id = setInterval(() => setUptime(Math.floor((Date.now() - start) / 1000)), 1000);
+    return () => clearInterval(id);
+  }, [menuOpen]);
+
+  const fmtUptime = (s) => [Math.floor(s / 3600), Math.floor((s % 3600) / 60), s % 60].map((n) => String(n).padStart(2, "0")).join(":");
+
+  const menuItems = ["home", "about", "skills", "projects", "reviews", "contact"];
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex items-center justify-center 
-      bg-[#1a1a1a]/95 backdrop-blur-xl transition-all duration-700
-      ${menuOpen ? "opacity-100 visible" : "opacity-0 invisible"}
-      `}
+      className={`fixed inset-0 z-50 font-mono transition-all duration-500 ${
+        menuOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"
+      }`}
+      style={{
+        background: "radial-gradient(ellipse at 50% 20%, #0f1a15 0%, #0a100e 45%, #050807 100%)",
+      }}
     >
-      {/* Neomorphic Background Pattern */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-[#1a1a1a]/95"></div>
-        
-        {/* Soft Ambient Glows */}
-        <div className="absolute w-[500px] h-[500px] bg-red-600/5 blur-[150px] rounded-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
-        <div className="absolute w-[300px] h-[300px] bg-purple-600/5 blur-[120px] rounded-full top-0 right-0"></div>
-        <div className="absolute w-[250px] h-[250px] bg-blue-600/5 blur-[100px] rounded-full bottom-0 left-0"></div>
-        
-        {/* Neomorphic Grid Pattern */}
-        <div className="absolute inset-0 opacity-5" style={{
-          backgroundImage: `radial-gradient(circle at 1px 1px, #ffffff 1px, transparent 0)`,
-          backgroundSize: '40px 40px'
-        }}></div>
-      </div>
+      {/* Grid background */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-[0.08]"
+        style={{
+          backgroundImage: "linear-gradient(rgba(74,222,128,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(74,222,128,0.5) 1px, transparent 1px)",
+          backgroundSize: "40px 40px",
+          maskImage: "radial-gradient(ellipse at center, black 30%, transparent 80%)",
+        }}
+      />
 
-      {/* Neomorphic Close Button */}
-      <button
-        onClick={() => setMenuOpen(false)}
-        className="absolute top-6 right-6 w-14 h-14 rounded-full text-white text-3xl font-light
-          bg-[#1a1a1a]
-          shadow-[6px_6px_16px_#0f0f0f,-6px_-6px_16px_#252525]
-          hover:shadow-[3px_3px_8px_#0f0f0f,-3px_-3px_8px_#252525]
-          active:shadow-[inset_6px_6px_16px_#0f0f0f,inset_-6px_-6px_16px_#252525]
-          hover:bg-[#1e1e1e]
-          transition-all duration-300
-          flex items-center justify-center
-          group/btn"
-      >
-        {/* Neomorphic Inner Glow */}
-        <span className="absolute inset-0 rounded-full bg-gradient-to-b from-red-500/10 to-transparent opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></span>
-        
-        {/* Neomorphic Red Glow Effect */}
-        <span className="absolute inset-0 rounded-full opacity-0 group-hover/btn:opacity-100 transition-opacity duration-500 shadow-[0_0_40px_rgba(239,68,68,0.15)]"></span>
-        
-        <span className="relative group-hover/btn:rotate-90 transition-transform duration-300 group-hover/btn:text-red-400">
-          ×
-        </span>
-      </button>
+      {/* Phosphor glow */}
+      <div
+        className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full blur-[140px] pointer-events-none"
+        style={{ background: "radial-gradient(circle, rgba(74,222,128,0.2), transparent 70%)" }}
+      />
 
-      {/* Menu Container with Neomorphic Card */}
-      <div className="relative z-10 flex flex-col items-center space-y-6 p-12 rounded-3xl
-        bg-[#1a1a1a]
-        shadow-[20px_20px_50px_#0f0f0f,-20px_-20px_50px_#252525]
-        transition-all duration-500
-        max-w-sm w-full mx-4">
-        
-        {/* Neomorphic Top Highlight */}
-        <div className="absolute inset-x-8 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/15 to-transparent rounded-full"></div>
-        
-        {/* Neomorphic Inner Glow */}
-        <div className="absolute inset-0 rounded-3xl bg-gradient-to-b from-red-500/5 to-transparent"></div>
-
-        {/* Decorative Neomorphic Orbs */}
-        <div className="absolute -top-3 -right-3 w-6 h-6 rounded-full bg-[#1a1a1a] shadow-[3px_3px_8px_#0f0f0f,-3px_-3px_8px_#252525]"></div>
-        <div className="absolute -bottom-3 -left-3 w-6 h-6 rounded-full bg-[#1a1a1a] shadow-[3px_3px_8px_#0f0f0f,-3px_-3px_8px_#252525]"></div>
-
-        {/* Brand/Logo at top of menu */}
-        <div className="relative mb-2 px-6 py-2 rounded-full text-sm font-mono text-gray-400 tracking-widest
-          bg-[#1a1a1a]
-          shadow-[inset_2px_2px_6px_#0f0f0f,inset_-2px_-2px_6px_#252525]">
-          NAVIGATION
-        </div>
-
-        {menuItems.map((item, i) => (
-          <a
-            key={item}
-            href={`#${item.toLowerCase()}`}
-            onClick={() => setMenuOpen(false)}
-            className={`relative w-full text-center px-8 py-4 rounded-xl font-bold tracking-wide 
-            transition-all duration-300
-            bg-[#1a1a1a]
-            shadow-[4px_4px_12px_#0f0f0f,-4px_-4px_12px_#252525]
-            hover:shadow-[2px_2px_6px_#0f0f0f,-2px_-2px_6px_#252525]
-            active:shadow-[inset_4px_4px_12px_#0f0f0f,inset_-4px_-4px_12px_#252525]
-            hover:bg-[#1e1e1e]
-            group
-            ${menuOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}
-            `}
-            style={{ transitionDelay: `${i * 100}ms` }}
+      {/* Full-screen terminal window */}
+      <div className="relative h-full w-full flex items-center justify-center px-4 py-6">
+        <div
+          className={`relative w-full max-w-sm rounded-lg overflow-hidden transition-all duration-500 ${
+            menuOpen ? "translate-y-0 scale-100" : "translate-y-4 scale-95"
+          }`}
+          style={{
+            background: "linear-gradient(180deg, #16161a 0%, #101014 100%)",
+            border: "1px solid rgba(74,222,128,0.3)",
+            boxShadow: "0 20px 60px rgba(0,0,0,0.9), inset 0 1px 0 rgba(74,222,128,0.1), 0 0 40px rgba(74,222,128,0.08)",
+          }}
+        >
+          {/* ===== Title bar ===== */}
+          <div
+            className="flex items-center gap-2 px-4 py-2.5 border-b"
+            style={{ background: "linear-gradient(180deg, #26262c, #1a1a20)", borderColor: "rgba(0,0,0,0.6)" }}
           >
-            {/* Neomorphic Inner Glow */}
-            <span className="absolute inset-0 rounded-xl bg-gradient-to-b from-red-500/8 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
-            
-            {/* Neomorphic Border Glow */}
-            <span className="absolute -inset-[1px] rounded-xl bg-gradient-to-r from-red-500/0 via-red-500/15 to-red-500/0 opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-500"></span>
-
-            {/* Menu Item Text */}
-            <span className="relative text-2xl md:text-3xl font-bold tracking-wide
-              bg-gradient-to-r from-red-400 via-red-300 to-orange-400 bg-clip-text text-transparent
-              group-hover:brightness-125 transition-all duration-300">
-              {item}
+            <div className="flex gap-1.5">
+              <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#ef4444", boxShadow: "0 0 4px rgba(239,68,68,0.9)" }} />
+              <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#f59e0b", boxShadow: "0 0 4px rgba(245,158,11,0.7)" }} />
+              <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#22c55e", boxShadow: "0 0 4px rgba(34,197,94,0.9)" }} />
+            </div>
+            <FaTerminal className="w-3 h-3 ml-2" style={glowGreen} />
+            <span className="text-[9px] tracking-widest" style={dim}>
+              menu_session — zsh
             </span>
-
-            {/* Neomorphic Underline Effect */}
-            <span className="absolute left-1/2 -bottom-1 w-0 h-[2px] 
-              bg-gradient-to-r from-red-500 to-orange-400 
-              transition-all duration-300 group-hover:w-3/4 group-hover:left-[12.5%]
-              rounded-full
-              shadow-[0_0_10px_rgba(239,68,68,0.3)]">
-            </span>
-
-            {/* Decorative Arrow Indicator */}
-            <span className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:translate-x-1
-              text-red-400 text-lg">
-              →
-            </span>
-          </a>
-        ))}
-
-        {/* Menu Footer with Neomorphic Design */}
-        <div className="relative mt-4 w-full flex justify-center gap-4 pt-4 border-t border-white/5">
-          <div className="flex gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#1a1a1a] shadow-[inset_1px_1px_2px_#0f0f0f,inset_-1px_-1px_2px_#252525]"></span>
-            <span className="w-1.5 h-1.5 rounded-full bg-[#1a1a1a] shadow-[inset_1px_1px_2px_#0f0f0f,inset_-1px_-1px_2px_#252525]"></span>
-            <span className="w-1.5 h-1.5 rounded-full bg-[#1a1a1a] shadow-[inset_1px_1px_2px_#0f0f0f,inset_-1px_-1px_2px_#252525]"></span>
+            <button
+              onClick={() => setMenuOpen(false)}
+              aria-label="Close menu"
+              className="ml-auto w-6 h-6 rounded flex items-center justify-center transition-all duration-150 active:translate-y-[1px]"
+              style={{
+                background: "linear-gradient(180deg, #3a3a40, #24242a)",
+                border: "1px solid rgba(248,113,113,0.25)",
+                boxShadow: "0 2px 0 #08080a, inset 0 1px 0 rgba(255,255,255,0.1)",
+                color: "#f87171",
+              }}
+            >
+              <FaTimes className="w-2.5 h-2.5" />
+            </button>
           </div>
-          <span className="text-[10px] text-gray-500 tracking-widest uppercase">Menu</span>
+
+          {/* ===== CRT body ===== */}
+          <div className="relative" style={crtScreen}>
+            <div className="absolute inset-0 pointer-events-none opacity-25" style={scanlines} />
+
+            <div className="relative p-4">
+
+              {/* Boot header */}
+              <div className="text-[11px] leading-relaxed mb-3 space-y-0.5">
+                <div className="flex items-start gap-1.5" style={bodyText}>
+                  <span style={glowGreen}>$</span>
+                  <span>./menu.sh --interactive</span>
+                </div>
+                <div className="flex items-center gap-1.5 pl-3" style={dim}>
+                  <span>→</span>
+                  <span>loading routes...</span>
+                  <span style={glowGreen}>[ok]</span>
+                </div>
+              </div>
+
+              <div className="h-px mb-3 bg-gradient-to-r from-green-500/30 via-green-500/10 to-transparent" />
+
+              {/* Column header — ps style */}
+              <div className="flex items-center gap-2 text-[9px] uppercase tracking-widest mb-2 px-1" style={dim}>
+                <span className="w-6">pid</span>
+                <span className="flex-1">cmd</span>
+                <span>status</span>
+              </div>
+
+              {/* Route rows — staggered */}
+              <div className="space-y-1.5">
+                {menuItems.map((item, i) => (
+                  <a
+                    key={item}
+                    href={`#${item}`}
+                    onClick={() => setMenuOpen(false)}
+                    className={`group/route relative flex items-center gap-2 px-2.5 py-2.5 rounded-md transition-all duration-150 active:translate-y-[1px] ${
+                      menuOpen ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-4"
+                    }`}
+                    style={{
+                      background: "linear-gradient(180deg, #1c1c22 0%, #14141a 100%)",
+                      border: "1px solid rgba(74,222,128,0.12)",
+                      boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04), 0 2px 0 #08080a",
+                      transitionDelay: menuOpen ? `${i * 50}ms` : "0ms",
+                    }}
+                  >
+                    {/* PID */}
+                    <span className="text-[9px] w-6" style={dim}>
+                      {String(1000 + i * 11).padStart(4, "0")}
+                    </span>
+
+                    {/* Prompt + command */}
+                    <span className="text-[11px]" style={glowGreen}>&gt;</span>
+                    <span className="flex-1 text-[13px] tracking-wider uppercase font-bold" style={{ color: "#d1fae5" }}>
+                      ./{item}
+                    </span>
+
+                    {/* Status LED */}
+                    <div className="flex items-center gap-1">
+                      <Led color="green" pulse />
+                      <span className="text-[8px] uppercase tracking-widest" style={glowGreen}>run</span>
+                    </div>
+
+                    {/* Hover arrow */}
+                    <span className="text-[10px] opacity-0 group-hover/route:opacity-100 transition-opacity" style={glowGreen}>
+                      ↵
+                    </span>
+                  </a>
+                ))}
+              </div>
+
+              {/* Footer / system info */}
+              <div className="mt-4 pt-3 border-t text-[10px] space-y-1.5" style={{ borderColor: "rgba(74,222,128,0.1)" }}>
+                <div className="flex items-center justify-between">
+                  <span className="flex items-center gap-1.5">
+                    <FaCodeBranch className="w-2.5 h-2.5" style={glowCyan} />
+                    <span style={dim}>git:</span>
+                    <span style={glowCyan}>main</span>
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <FaWifi className="w-2.5 h-2.5" style={glowGreen} />
+                    <span style={dim}>net:</span>
+                    <span style={glowGreen}>online</span>
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="flex items-center gap-1.5">
+                    <FaLock className="w-2.5 h-2.5" style={glowGreen} />
+                    <span style={dim}>tls 1.3</span>
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <span style={dim}>uptime:</span>
+                    <span style={glowAmber}>{fmtUptime(uptime)}</span>
+                  </span>
+                </div>
+              </div>
+
+              {/* Prompt line at bottom */}
+              <div className="flex items-center gap-1.5 mt-3 text-[11px]">
+                <span style={glowGreen}>$</span>
+                <span className="inline-block w-[6px] h-3 align-middle bg-green-400 animate-pulse" />
+              </div>
+            </div>
+          </div>
+
+          {/* ===== Status bar ===== */}
+          <div
+            className="flex items-center justify-between px-4 py-1.5 text-[9px] border-t"
+            style={{
+              background: "linear-gradient(180deg, #1a1a20, #101014)",
+              borderColor: "rgba(0,0,0,0.6)",
+              color: "#5a6a64",
+            }}
+          >
+            <span>UTF-8 · zsh · 80×24</span>
+            <div className="flex items-center gap-2">
+              <span style={glowAmber}>{clock}</span>
+              <Led color="green" pulse />
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Global Neomorphic Styles */}
       <style>{`
-        /* Neomorphic Base */
-        .neu-base {
-          background: #1a1a1a;
-          border-radius: 1rem;
-        }
-        
-        /* Neomorphic Extruded */
-        .neu-extruded {
-          box-shadow: 20px 20px 50px #0f0f0f, -20px -20px 50px #252525;
-        }
-        
-        /* Neomorphic Inset */
-        .neu-inset {
-          box-shadow: inset 4px 4px 12px #0f0f0f, inset -4px -4px 12px #252525;
-        }
-        
-        /* Neomorphic Pressed (Active State) */
-        .neu-pressed {
-          box-shadow: inset 6px 6px 16px #0f0f0f, inset -6px -6px 16px #252525;
-        }
-        
-        /* Smooth Transitions */
-        * {
-          transition: box-shadow 0.3s ease, background 0.3s ease, transform 0.3s ease;
-        }
-
-        /* Neomorphic Grid Pattern */
-        .neu-grid {
-          background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0);
-          background-size: 40px 40px;
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-          width: 6px;
-        }
-        
-        ::-webkit-scrollbar-track {
-          background: #1a1a1a;
-          box-shadow: inset 1px 1px 3px #0f0f0f, inset -1px -1px 3px #252525;
-        }
-        
-        ::-webkit-scrollbar-thumb {
-          background: #2a2a2a;
-          box-shadow: 2px 2px 4px #0f0f0f, -2px -2px 4px #252525;
-          border-radius: 10px;
-        }
-        
-        ::-webkit-scrollbar-thumb:hover {
-          background: #333;
+        @media (prefers-reduced-motion: reduce) {
+          * {
+            animation-duration: 0.01ms !important;
+            transition-duration: 0.01ms !important;
+          }
         }
       `}</style>
     </div>
