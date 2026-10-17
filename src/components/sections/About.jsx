@@ -1,181 +1,267 @@
 import { RevealOnScroll } from "../RevealOnScroll";
-import { FaDownload } from "react-icons/fa";
+import { FaDownload, FaTerminal, FaCircle, FaSquare, FaLock, FaCode, FaDatabase, FaServer, FaPaintBrush, FaDesktop } from "react-icons/fa";
 import { motion, useReducedMotion } from "framer-motion";
 import Resume from "./Resume.pdf";
 import VideoSrc from "../../assets/BG.mp4";
 
-/* ---------------- Skill Card ---------------- */
+/* ============ Shared tokens ============ */
+const terminalChrome = {
+  background: "linear-gradient(180deg, #2a2a30 0%, #1e1e24 100%)",
+  boxShadow:
+    "0 2px 0 #0a0a0c, 0 6px 16px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.12)",
+};
 
-const SkillCard = ({ title, skills, variants }) => (
-  <motion.div
-    variants={variants}
-    whileHover={{ y: -4, scale: 1.015 }}
-    transition={{ type: "spring", stiffness: 260, damping: 22 }}
-    style={{ willChange: "transform" }}
-    className="relative group rounded-2xl bg-[#1a1a1a] shadow-[8px_8px_20px_#0f0f0f,-8px_-8px_20px_#252525] hover:shadow-[4px_4px_12px_#0f0f0f,-4px_-4px_12px_#252525] transition-shadow duration-300"
-  >
-    {/* Neomorphic Inner Highlight */}
-    <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+const crtScreen = {
+  background:
+    "radial-gradient(ellipse at 50% 40%, #0d1a14 0%, #081210 60%, #040808 100%)",
+  boxShadow:
+    "inset 0 3px 8px rgba(0,0,0,0.95), inset 0 -1px 0 rgba(255,255,255,0.04), 0 1px 0 rgba(255,255,255,0.05)",
+};
 
-    <div className="relative rounded-2xl p-6 bg-[#1a1a1a] transition-colors duration-300 group-hover:bg-[#1e1e1e]">
-      <h3 className="text-xl font-semibold mb-4 text-red-400">{title}</h3>
+const scanlines = {
+  backgroundImage:
+    "repeating-linear-gradient(0deg, rgba(255,255,255,0.06) 0px, rgba(255,255,255,0.06) 1px, transparent 1px, transparent 3px)",
+};
 
-      <div className="flex flex-wrap gap-2">
-        {skills.map((tech, key) => (
-          <span
-            key={key}
-            className="relative px-4 py-1.5 rounded-full text-sm font-medium text-red-300 transition-all duration-300
-              bg-[#1a1a1a]
-              shadow-[inset_2px_2px_6px_#0f0f0f,inset_-2px_-2px_6px_#252525]
-              hover:shadow-[inset_1px_1px_3px_#0f0f0f,inset_-1px_-1px_3px_#252525]
-              hover:text-white hover:scale-105
-              group/tech"
-          >
-            <span className="absolute inset-0 rounded-full bg-gradient-to-b from-red-500/10 to-transparent opacity-0 group-hover/tech:opacity-100 transition-opacity duration-300"></span>
-            <span className="relative">{tech}</span>
-          </span>
+const glowGreen = { color: "#4ade80", textShadow: "0 0 6px rgba(74,222,128,0.7)" };
+const glowAmber = { color: "#fbbf24", textShadow: "0 0 6px rgba(251,191,36,0.7)" };
+const glowRed = { color: "#f87171", textShadow: "0 0 6px rgba(248,113,113,0.7)" };
+const glowCyan = { color: "#67e8f9", textShadow: "0 0 6px rgba(103,232,249,0.7)" };
+const dimText = { color: "#6b7c76" };
+
+/* ============ Terminal window wrapper ============ */
+const TerminalWindow = ({ title = "bash", children, status = "online", className = "" }) => (
+  <div className={`relative rounded-lg overflow-hidden ${className}`} style={terminalChrome}>
+    {/* Title bar */}
+    <div
+      className="relative flex items-center gap-2 px-4 py-2.5 border-b"
+      style={{
+        background: "linear-gradient(180deg, #38383e, #2a2a30)",
+        borderColor: "rgba(0,0,0,0.6)",
+        boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08)",
+      }}
+    >
+      {/* Window dots */}
+      <div className="flex gap-1.5">
+        <span className="w-3 h-3 rounded-full" style={{ background: "radial-gradient(circle at 30% 30%, #ff8a8a, #ef4444 60%, #7f1d1d)", boxShadow: "inset 0 -1px 1px rgba(0,0,0,0.4)" }} />
+        <span className="w-3 h-3 rounded-full" style={{ background: "radial-gradient(circle at 30% 30%, #fcd34d, #f59e0b 60%, #78350f)", boxShadow: "inset 0 -1px 1px rgba(0,0,0,0.4)" }} />
+        <span className="w-3 h-3 rounded-full" style={{ background: "radial-gradient(circle at 30% 30%, #86efac, #22c55e 60%, #14532d)", boxShadow: "inset 0 -1px 1px rgba(0,0,0,0.4)" }} />
+      </div>
+      <div className="flex items-center gap-2 ml-3 flex-1 min-w-0">
+        <FaTerminal className="w-3 h-3 shrink-0" style={{ color: "#8a8a90" }} />
+        <span className="text-[11px] font-mono tracking-wider truncate" style={{ color: "#a0a0a8" }}>
+          {title}
+        </span>
+      </div>
+      <span className="text-[9px] font-mono uppercase tracking-widest" style={glowGreen}>
+        ● {status}
+      </span>
+    </div>
+
+    {/* CRT screen */}
+    <div className="relative" style={crtScreen}>
+      <div className="absolute inset-0 pointer-events-none opacity-[0.35]" style={scanlines} />
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: "radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.5) 100%)",
+        }}
+      />
+      <div className="relative p-5 md:p-7">{children}</div>
+    </div>
+
+    {/* Status bar */}
+    <div
+      className="flex items-center justify-between px-4 py-1.5 text-[10px] font-mono border-t"
+      style={{
+        background: "linear-gradient(180deg, #22222a, #1a1a20)",
+        borderColor: "rgba(0,0,0,0.6)",
+        color: "#5a6a64",
+      }}
+    >
+      <span>UTF-8 · bash · 120×40</span>
+      <span className="flex items-center gap-1.5">
+        <span className="w-1.5 h-1.5 rounded-full" style={{ background: "#4ade80", boxShadow: "0 0 4px rgba(74,222,128,0.9)" }} />
+        connected
+      </span>
+    </div>
+  </div>
+);
+
+/* ============ Prompt line ============ */
+const Prompt = ({ children, user = "faizan", path = "~" }) => (
+  <div className="font-mono text-[13px] md:text-sm flex items-start gap-1.5 mb-1">
+    <span style={glowGreen}>{user}@deslog</span>
+    <span style={dimText}>:</span>
+    <span style={glowCyan}>{path}</span>
+    <span style={dimText}>$</span>
+    <span className="ml-1 flex-1" style={{ color: "#c8d4ce" }}>{children}</span>
+  </div>
+);
+
+/* ============ Skill module — package manifest ============ */
+const SkillModule = ({ icon: Icon, title, pkg, skills, variants, color = "green" }) => {
+  const colorMap = {
+    green: { text: glowGreen, border: "rgba(74,222,128,0.3)" },
+    cyan: { text: glowCyan, border: "rgba(103,232,249,0.3)" },
+    amber: { text: glowAmber, border: "rgba(251,191,36,0.3)" },
+    red: { text: glowRed, border: "rgba(248,113,113,0.3)" },
+  }[color];
+
+  return (
+    <motion.div
+      variants={variants}
+      whileHover={{ y: -2 }}
+      transition={{ type: "spring", stiffness: 300, damping: 24 }}
+      className="relative rounded-md overflow-hidden font-mono"
+      style={{
+        background: "linear-gradient(180deg, #16161a, #101014)",
+        border: `1px solid ${colorMap.border}`,
+        boxShadow:
+          "inset 0 1px 0 rgba(255,255,255,0.05), inset 0 -1px 0 rgba(0,0,0,0.6), 0 2px 6px rgba(0,0,0,0.5)",
+      }}
+    >
+      {/* Module header */}
+      <div
+        className="flex items-center gap-2 px-3 py-2 border-b"
+        style={{ borderColor: "rgba(255,255,255,0.05)", background: "rgba(255,255,255,0.02)" }}
+      >
+        <Icon className="w-3 h-3 shrink-0" style={colorMap.text} />
+        <span className="text-[11px] tracking-wider uppercase" style={{ color: "#9aa6a0" }}>
+          {title}
+        </span>
+        <span className="ml-auto text-[10px]" style={dimText}>
+          {pkg}
+        </span>
+      </div>
+
+      {/* Skill rows */}
+      <div className="p-3 space-y-1">
+        {skills.map((skill, i) => (
+          <div key={i} className="flex items-center gap-2 text-[12px] group/row">
+            <span style={dimText}>{">"}</span>
+            <span
+              className="flex-1 truncate transition-colors duration-150"
+              style={{ color: "#c8d4ce" }}
+            >
+              {skill}
+            </span>
+            <span className="text-[10px] opacity-0 group-hover/row:opacity-100 transition-opacity" style={colorMap.text}>
+              ●
+            </span>
+          </div>
         ))}
       </div>
-    </div>
-  </motion.div>
-);
+    </motion.div>
+  );
+};
 
-/* ---------------- Education Card ---------------- */
+/* ============ Progress meter (VU-style) ============ */
+const Meter = ({ label, value, color = "green" }) => {
+  const cells = 20;
+  const filled = Math.round((value / 100) * cells);
+  const colorMap = {
+    green: { on: "#4ade80", glow: "rgba(74,222,128,0.7)" },
+    amber: { on: "#fbbf24", glow: "rgba(251,191,36,0.7)" },
+    red: { on: "#f87171", glow: "rgba(248,113,113,0.7)" },
+  }[color];
 
-const EducationCard = ({ variants }) => (
-  <motion.div
-    variants={variants}
-    whileHover={{ y: -4 }}
-    transition={{ type: "spring", stiffness: 260, damping: 22 }}
-    style={{ willChange: "transform" }}
-    className="relative group rounded-2xl bg-[#1a1a1a] shadow-[8px_8px_20px_#0f0f0f,-8px_-8px_20px_#252525] hover:shadow-[4px_4px_12px_#0f0f0f,-4px_-4px_12px_#252525] transition-shadow duration-300"
-  >
-    {/* Neomorphic Top Highlight */}
-    <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
-
-    {/* Neomorphic Inner Glow */}
-    <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-red-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-
-    <div className="relative p-6 rounded-2xl bg-[#1a1a1a] transition-colors duration-300 group-hover:bg-[#1e1e1e]">
-      <h3 className="text-xl font-bold mb-4 text-red-400">Education</h3>
-
-      <ul className="text-gray-300 space-y-3 text-sm leading-relaxed">
-        <li className="relative pl-4">
-          <span className="absolute left-0 top-2 w-1.5 h-1.5 rounded-full bg-[#1a1a1a] shadow-[inset_1px_1px_2px_#0f0f0f,inset_-1px_-1px_2px_#252525]"></span>
-          <strong>B.S. in Information Technology</strong> — University of Gujrat (2021–2025)
-        </li>
-
-        <li className="relative pl-4">
-          <span className="absolute left-0 top-2 w-1.5 h-1.5 rounded-full bg-[#1a1a1a] shadow-[inset_1px_1px_2px_#0f0f0f,inset_-1px_-1px_2px_#252525]"></span>
-          Final Year Project: Developed a cross-platform
-          <strong> mobile application</strong> using
-          <strong> Flutter</strong> and <strong>Firebase</strong>.
-        </li>
-
-        <li className="relative pl-4">
-          <span className="absolute left-0 top-2 w-1.5 h-1.5 rounded-full bg-[#1a1a1a] shadow-[inset_1px_1px_2px_#0f0f0f,inset_-1px_-1px_2px_#252525]"></span>
-          Assistant Teacher for <strong>ReactJS</strong> and
-          <strong> Tailwind CSS</strong>.
-        </li>
-      </ul>
-    </div>
-  </motion.div>
-);
-
-/* ---------------- Experience Card ---------------- */
-
-const ExperienceCard = ({ variants }) => (
-  <motion.div
-    variants={variants}
-    whileHover={{ y: -4 }}
-    transition={{ type: "spring", stiffness: 260, damping: 22 }}
-    style={{ willChange: "transform" }}
-    className="relative group rounded-2xl bg-[#1a1a1a] shadow-[8px_8px_20px_#0f0f0f,-8px_-8px_20px_#252525] hover:shadow-[4px_4px_12px_#0f0f0f,-4px_-4px_12px_#252525] transition-shadow duration-300"
-  >
-    {/* Neomorphic Top Highlight */}
-    <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
-
-    {/* Neomorphic Inner Glow */}
-    <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-red-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-
-    <div className="relative p-6 rounded-2xl bg-[#1a1a1a] transition-colors duration-300 group-hover:bg-[#1e1e1e]">
-      <h3 className="text-xl font-bold mb-4 text-red-400">Experience</h3>
-
-      <div className="text-sm text-gray-300 space-y-3 leading-relaxed">
-        <div className="relative pl-4">
-          <span className="absolute left-0 top-1.5 w-1.5 h-1.5 rounded-full bg-[#1a1a1a] shadow-[inset_1px_1px_2px_#0f0f0f,inset_-1px_-1px_2px_#252525]"></span>
-          <h4 className="font-semibold text-white">
-            Frontend Developer (2023 – Present)
-          </h4>
-
-          <p className="mt-1">
-            Developed responsive UI using <strong>ReactJS</strong> and
-            <strong> Tailwind CSS</strong>. Optimized UX, animations,
-            and scalable frontend architecture.
-          </p>
-        </div>
+  return (
+    <div className="flex items-center gap-2 font-mono text-[11px]">
+      <span className="w-24 truncate" style={{ color: "#9aa6a0" }}>{label}</span>
+      <div className="flex gap-[2px] flex-1">
+        {Array.from({ length: cells }).map((_, i) => (
+          <span
+            key={i}
+            className="h-2 flex-1 rounded-[1px]"
+            style={{
+              background: i < filled ? colorMap.on : "rgba(255,255,255,0.06)",
+              boxShadow: i < filled ? `0 0 3px ${colorMap.glow}` : "inset 0 1px 1px rgba(0,0,0,0.6)",
+            }}
+          />
+        ))}
       </div>
+      <span className="w-8 text-right" style={{ color: colorMap.on }}>{value}%</span>
     </div>
-  </motion.div>
-);
+  );
+};
 
-/* ---------------- Certificate Card ---------------- */
-
+/* ============ Certificate — license key card ============ */
 const CertificateCard = ({ cert, variants }) => (
   <motion.div
     variants={variants}
-    whileHover={{ y: -8, scale: 1.02 }}
-    transition={{ type: "spring", stiffness: 240, damping: 20 }}
-    style={{ willChange: "transform" }}
-    className="relative group rounded-2xl bg-[#1a1a1a] shadow-[8px_8px_20px_#0f0f0f,-8px_-8px_20px_#252525] hover:shadow-[4px_4px_12px_#0f0f0f,-4px_-4px_12px_#252525] transition-shadow duration-300"
+    whileHover={{ y: -3 }}
+    transition={{ type: "spring", stiffness: 280, damping: 22 }}
+    className="relative rounded-lg overflow-hidden font-mono group"
+    style={{
+      background: "linear-gradient(180deg, #16161a, #101014)",
+      border: "1px solid rgba(103,232,249,0.2)",
+      boxShadow:
+        "inset 0 1px 0 rgba(255,255,255,0.05), 0 4px 12px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,0,0,0.5)",
+    }}
   >
-    {/* Neomorphic Top Highlight */}
-    <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+    {/* Top strip */}
+    <div
+      className="flex items-center justify-between px-3 py-1.5 border-b"
+      style={{ borderColor: "rgba(255,255,255,0.05)", background: "rgba(103,232,249,0.04)" }}
+    >
+      <span className="text-[9px] tracking-[0.3em] uppercase" style={glowCyan}>
+        CERT
+      </span>
+      <span className="text-[9px]" style={dimText}>{cert.date}</span>
+    </div>
 
-    {/* Neomorphic Inner Glow */}
-    <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-red-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-
-    {/* Neomorphic Border Glow on Hover */}
-    <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-r from-red-500/0 via-red-500/20 to-red-500/0 opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-500"></div>
-
-    <div className="relative p-6 rounded-2xl bg-[#1a1a1a] transition-colors duration-300 group-hover:bg-[#1e1e1e]">
-      <h3 className="text-lg font-semibold mb-1 text-red-300">
+    <div className="p-4">
+      <h3 className="text-[13px] font-bold mb-2 leading-snug" style={{ color: "#e0f0ea" }}>
         {cert.title}
       </h3>
 
-      <p className="text-gray-300 text-sm leading-relaxed">
-        {cert.description}
-      </p>
+      {/* Description in nested code block */}
+      <div
+        className="rounded p-2.5 mb-3 text-[11px] leading-relaxed"
+        style={{
+          background: "rgba(0,0,0,0.4)",
+          border: "1px solid rgba(255,255,255,0.04)",
+          color: "#9aa6a0",
+        }}
+      >
+        <span style={glowGreen}>$</span> {cert.description}
+      </div>
 
-      <p className="text-gray-400 text-xs mt-2">
-        {cert.issuer} — {cert.date}
-      </p>
+      <div className="flex items-center justify-between text-[10px] mb-3">
+        <span style={dimText}>issuer:</span>
+        <span style={{ color: "#a8d4c0" }}>{cert.issuer}</span>
+      </div>
 
       {cert.link && (
         <a
           href={cert.link}
           target="_blank"
           rel="noopener noreferrer"
-          className="relative inline-block mt-3 text-sm font-medium text-red-400 hover:text-red-300 transition-colors duration-300 group/link"
+          className="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded text-[10px] font-bold uppercase tracking-widest transition-all duration-150 active:translate-y-[1px]"
+          style={{
+            color: "#081210",
+            background: "linear-gradient(180deg, #4ade80, #22c55e)",
+            boxShadow:
+              "0 2px 0 #14532d, inset 0 1px 0 rgba(255,255,255,0.4), inset 0 -1px 0 rgba(0,0,0,0.2)",
+          }}
         >
-          View Certificate →
-          {/* Neomorphic Underline */}
-          <span className="absolute -bottom-0.5 left-0 w-full h-[1px] bg-red-400/30 rounded-full shadow-[inset_1px_1px_2px_#0f0f0f,inset_-1px_-1px_2px_#252525]"></span>
-          <span className="absolute -bottom-0.5 left-0 w-0 h-[1px] bg-red-400 group-hover/link:w-full transition-all duration-300"></span>
+          <FaLock className="w-2.5 h-2.5" />
+          verify
         </a>
       )}
     </div>
   </motion.div>
 );
 
-/* ---------------- Main About Component ---------------- */
+/* ============ Main About ============ */
 
 export const About = () => {
   const shouldReduceMotion = useReducedMotion();
 
   const springSnappy = shouldReduceMotion
     ? { duration: 0.01 }
-    : { type: "spring", stiffness: 260, damping: 22 };
+    : { type: "spring", stiffness: 280, damping: 24 };
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -183,304 +269,283 @@ export const About = () => {
       opacity: 1,
       transition: shouldReduceMotion
         ? { duration: 0.01 }
-        : { staggerChildren: 0.1, delayChildren: 0.15 },
+        : { staggerChildren: 0.07, delayChildren: 0.15 },
     },
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 28 },
+    hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,
       y: 0,
       transition: shouldReduceMotion
         ? { duration: 0.01 }
-        : { type: "spring", stiffness: 100, damping: 18 },
+        : { type: "spring", stiffness: 120, damping: 20 },
     },
   };
 
-  const frontendSkills = ["ReactJS", "Kotlin", "Flutter"];
-  const backendSkills = ["Node.js", "Python", "MongoDB"];
-  const graphicDesigning = ["Adobe Illustrator", "Adobe Photoshop", "Figma", "Corel Draw"];
-  const desktopApplication = ["Python PyQt5", "C# .NET"];
+  const modules = [
+    { icon: FaCode, title: "frontend", pkg: "v18.2", color: "green", skills: ["ReactJS", "Kotlin", "Flutter"] },
+    { icon: FaServer, title: "backend", pkg: "v20.11", color: "cyan", skills: ["Node.js", "Python", "MongoDB"] },
+    { icon: FaPaintBrush, title: "graphics", pkg: "v6.0", color: "amber", skills: ["Illustrator", "Photoshop", "Figma", "CorelDRAW"] },
+    { icon: FaDesktop, title: "desktop", pkg: "v3.1", color: "red", skills: ["Python PyQt5", "C# .NET"] },
+  ];
 
   const certificates = [
-    {
-      title: "Generative AI: Prompt Engineering Basics",
-      description: "Completed an IBM authorized course on Prompt Engineering.",
-      link: "https://coursera.org/verify/2ZUQRFNVP0TF",
-      date: "Sep 12, 2025",
-      issuer: "IBM (Coursera)",
-    },
-    {
-      title: "Introduction to Front-End Development",
-      description: "Meta authorized course covering HTML, CSS, JavaScript.",
-      link: "https://coursera.org/verify/YBRG7PHYHRDZ",
-      date: "Sep 11, 2025",
-      issuer: "Meta (Coursera)",
-    },
-    {
-      title: "Learn Firebase",
-      description: "Scrimba course covering authentication, realtime DB, hosting.",
-      link: "https://coursera.org/verify/91T4444LH0VD",
-      date: "Sep 14, 2025",
-      issuer: "Scrimba (Coursera)",
-    },
+    { title: "Generative AI: Prompt Engineering Basics", description: "IBM authorized · prompt engineering", link: "https://coursera.org/verify/2ZUQRFNVP0TF", date: "2025-09-12", issuer: "IBM" },
+    { title: "Introduction to Front-End Development", description: "Meta authorized · HTML, CSS, JS", link: "https://coursera.org/verify/YBRG7PHYHRDZ", date: "2025-09-11", issuer: "Meta" },
+    { title: "Learn Firebase", description: "Scrimba · auth, realtime DB, hosting", link: "https://coursera.org/verify/91T4444LH0VD", date: "2025-09-14", issuer: "Scrimba" },
   ];
 
   return (
     <>
-      {/* ---------------- About + Skills ---------------- */}
-
+      {/* ============ ABOUT ============ */}
       <section
         id="about"
-        className="relative mt-10 flex items-center justify-center py-20 bg-[#1a1a1a] overflow-hidden"
+        className="relative mt-10 py-20 overflow-hidden"
+        style={{
+          background:
+            "radial-gradient(ellipse at 50% 20%, #0f1a15 0%, #0a100e 50%, #050807 100%)",
+        }}
       >
-        {/* Neomorphic Background Pattern */}
-        <div className="absolute inset-0">
-          <div className="absolute top-0 left-0 w-full h-full bg-[#1a1a1a]"></div>
-          <motion.div
-            animate={
-              shouldReduceMotion
-                ? {}
-                : { scale: [1, 1.06, 1], opacity: [0.05, 0.08, 0.05] }
-            }
-            transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-red-600/5 rounded-full blur-[120px] will-change-transform"
-          />
-          <motion.div
-            animate={
-              shouldReduceMotion
-                ? {}
-                : { scale: [1, 1.08, 1], opacity: [0.05, 0.09, 0.05] }
-            }
-            transition={{ duration: 11, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-            className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-purple-600/5 rounded-full blur-[100px] will-change-transform"
-          />
-        </div>
+        {/* grid background */}
+        <div
+          className="absolute inset-0 pointer-events-none opacity-[0.07]"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(74,222,128,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(74,222,128,0.5) 1px, transparent 1px)",
+            backgroundSize: "40px 40px",
+            maskImage: "radial-gradient(ellipse at center, black 40%, transparent 80%)",
+          }}
+        />
+        <motion.div
+          animate={shouldReduceMotion ? {} : { opacity: [0.1, 0.2, 0.1] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[800px] h-[500px] rounded-full blur-[120px] pointer-events-none"
+          style={{ background: "radial-gradient(circle, rgba(74,222,128,0.25), transparent 70%)" }}
+        />
 
-        {/* Background Video with Neomorphic Overlay */}
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute top-0 left-0 w-full h-full object-cover z-0 opacity-30"
-        >
+        <video autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover opacity-10">
           <source src={VideoSrc} type="video/mp4" />
         </video>
 
-        {/* Neomorphic Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#1a1a1a]/80 via-[#1a1a1a]/60 to-[#1a1a1a]/90 z-0" />
-
-        <div className="relative z-10 w-full">
+        <div className="relative z-10 max-w-5xl mx-auto px-4">
           <RevealOnScroll>
-            <div className="max-w-5xl mx-auto px-4 text-white">
-              {/* Heading with animated underline */}
-              <h2 className="text-4xl md:text-5xl font-bold text-center mb-12 relative inline-block left-1/2 -translate-x-1/2">
-                <span className="bg-gradient-to-r from-red-500 via-red-400 to-orange-400 bg-clip-text text-transparent">
-                  About Me
-                </span>
-                {/* Neomorphic Underline - Animated */}
-                <motion.span
-                  initial={{ scaleX: 0 }}
-                  whileInView={{ scaleX: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.3 }}
-                  style={{ transformOrigin: "center" }}
-                  className="absolute -bottom-3 left-0 w-full h-[3px] rounded-full bg-[#1a1a1a] shadow-[inset_1px_1px_3px_#0f0f0f,inset_-1px_-1px_3px_#252525]"
-                />
-                <motion.span
-                  initial={{ scaleX: 0, opacity: 0 }}
-                  whileInView={{ scaleX: 1, opacity: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
-                  style={{ transformOrigin: "center" }}
-                  className="absolute -bottom-3 left-0 w-full h-[3px] rounded-full bg-gradient-to-r from-red-500/0 via-red-500/30 to-red-500/0 blur-[2px]"
-                />
+            {/* Section header — like a man page */}
+            <div className="mb-10 font-mono">
+              <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.3em]" style={glowGreen}>
+                <span className="w-2 h-2 rounded-full bg-green-400" style={{ boxShadow: "0 0 8px rgba(74,222,128,0.9)" }} />
+                section_01
+              </div>
+              <h2 className="mt-2 text-3xl md:text-4xl font-bold" style={{ color: "#e0f0ea" }}>
+                <span style={glowGreen}>$</span> cat about_me.md
+                <span className="inline-block w-[10px] h-[1em] ml-1 align-middle bg-green-400 animate-pulse" />
               </h2>
-
-              {/* Neomorphic Main Card - Extruded */}
-              <motion.div
-                initial={{ opacity: 0, y: 32 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.15 }}
-                transition={{ type: "spring", stiffness: 80, damping: 20 }}
-                style={{ willChange: "transform, opacity" }}
-                className="relative rounded-2xl bg-[#1a1a1a] shadow-[12px_12px_30px_#0f0f0f,-12px_-12px_30px_#252525] hover:shadow-[8px_8px_20px_#0f0f0f,-8px_-8px_20px_#252525] transition-shadow duration-500"
-              >
-                {/* Neomorphic Top Highlight */}
-                <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/15 to-transparent rounded-t-2xl"></div>
-
-                {/* Neomorphic Inner Glow */}
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-red-500/5 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-500"></div>
-
-                <div className="relative p-8 rounded-2xl bg-[#1a1a1a]">
-                  <p className="text-gray-300 mb-8 text-lg leading-relaxed tracking-wide">
-                    I bring ideas to life through full-stack development blending
-                    clean architecture, sleek interfaces, and purposeful design.
-                    Whether it's a high-performing web app or a beautifully
-                    responsive portfolio, I focus on delivering digital products
-                    that look great and feel effortless to use.
-                  </p>
-
-                  <motion.div
-                    variants={containerVariants}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, amount: 0.15 }}
-                    className="grid grid-cols-1 md:grid-cols-2 gap-6"
-                  >
-                    <SkillCard title="Frontend" skills={frontendSkills} variants={itemVariants} />
-                    <SkillCard title="Backend" skills={backendSkills} variants={itemVariants} />
-                    <SkillCard title="Graphic Designing" skills={graphicDesigning} variants={itemVariants} />
-                    <SkillCard title="Desktop Application Development" skills={desktopApplication} variants={itemVariants} />
-                  </motion.div>
-                </div>
-              </motion.div>
+              <div className="h-px mt-3 bg-gradient-to-r from-green-500/40 via-green-500/10 to-transparent" />
             </div>
+
+            {/* Main terminal */}
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.15 }}
+              transition={{ type: "spring", stiffness: 90, damping: 20 }}
+            >
+              <TerminalWindow title="faizan@deslog: ~/about" status="connected">
+                <Prompt>./intro.sh</Prompt>
+                <p className="font-mono text-[13px] md:text-sm leading-relaxed mb-6 pl-4 border-l-2" style={{ color: "#c8d4ce", borderColor: "rgba(74,222,128,0.4)" }}>
+                  <span style={dimText}># </span>
+                  I bring ideas to life through full-stack development — clean
+                  architecture, sleek interfaces, purposeful design. From
+                  high-performing web apps to responsive portfolios, I deliver
+                  digital products that look great and feel effortless.
+                </p>
+
+                <Prompt>ls -la ./skills/</Prompt>
+
+                <motion.div
+                  variants={containerVariants}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, amount: 0.15 }}
+                  className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4"
+                >
+                  {modules.map((m) => (
+                    <SkillModule key={m.title} {...m} variants={itemVariants} />
+                  ))}
+                </motion.div>
+
+                <div className="mt-5">
+                  <Prompt>nproc --proficiency</Prompt>
+                  <div className="mt-2 space-y-1.5 pl-4">
+                    <Meter label="Frontend" value={92} color="green" />
+                    <Meter label="Backend" value={85} color="green" />
+                    <Meter label="UI/UX" value={88} color="amber" />
+                    <Meter label="DevOps" value={72} color="amber" />
+                  </div>
+                </div>
+              </TerminalWindow>
+            </motion.div>
           </RevealOnScroll>
         </div>
       </section>
 
-      {/* ---------------- Education & Experience ---------------- */}
-
-      <section className="py-20 bg-[#1a1a1a]">
-        <div className="max-w-5xl mx-auto px-4 text-white">
+      {/* ============ EDUCATION & EXPERIENCE ============ */}
+      <section
+        className="py-20 relative overflow-hidden"
+        style={{
+          background:
+            "radial-gradient(ellipse at 50% 50%, #0f1a15 0%, #0a100e 60%, #050807 100%)",
+        }}
+      >
+        <div className="max-w-5xl mx-auto px-4">
           <RevealOnScroll>
             <motion.div
               variants={containerVariants}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, amount: 0.2 }}
-              className="grid grid-cols-1 md:grid-cols-2 gap-6"
+              className="grid grid-cols-1 md:grid-cols-2 gap-5"
             >
-              <EducationCard variants={itemVariants} />
-              <ExperienceCard variants={itemVariants} />
+              {/* Education terminal */}
+              <motion.div variants={itemVariants}>
+                <TerminalWindow title="edu.log" status="readonly">
+                  <Prompt path="~/education">tail -f history.log</Prompt>
+                  <div className="mt-3 space-y-3 font-mono text-[12px] pl-4" style={{ color: "#c8d4ce" }}>
+                    <div className="relative pl-4" style={{ borderLeft: "2px solid rgba(103,232,249,0.4)" }}>
+                      <div className="text-[10px] mb-0.5" style={dimText}>2021–2025</div>
+                      <div style={{ color: "#e0f0ea" }}>
+                        <span style={glowCyan}>BS</span> Information Technology
+                      </div>
+                      <div className="text-[11px]" style={dimText}>University of Gujrat</div>
+                    </div>
+                    <div className="relative pl-4" style={{ borderLeft: "2px solid rgba(103,232,249,0.4)" }}>
+                      <div className="text-[10px] mb-0.5" style={dimText}>FYP · 2025</div>
+                      <div style={{ color: "#e0f0ea" }}>
+                        <span style={glowCyan}>mobile</span> cross-platform app
+                      </div>
+                      <div className="text-[11px]" style={dimText}>Flutter + Firebase</div>
+                    </div>
+                    <div className="relative pl-4" style={{ borderLeft: "2px solid rgba(103,232,249,0.4)" }}>
+                      <div className="text-[10px] mb-0.5" style={dimText}>role</div>
+                      <div style={{ color: "#e0f0ea" }}>
+                        <span style={glowCyan}>TA</span> ReactJS · Tailwind CSS
+                      </div>
+                    </div>
+                  </div>
+                </TerminalWindow>
+              </motion.div>
+
+              {/* Experience terminal */}
+              <motion.div variants={itemVariants}>
+                <TerminalWindow title="work.log" status="active">
+                  <Prompt path="~/experience">systemctl status frontend</Prompt>
+                  <div className="mt-3 font-mono text-[12px] pl-4 space-y-2">
+                    <div className="flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full" style={{ background: "#4ade80", boxShadow: "0 0 6px rgba(74,222,128,0.9)" }} />
+                      <span style={glowGreen}>active (running)</span>
+                      <span className="text-[10px]" style={dimText}>since 2023</span>
+                    </div>
+                    <div style={{ color: "#e0f0ea" }}>
+                      <span style={glowAmber}>▸</span> Frontend Developer
+                    </div>
+                    <div className="text-[11px] leading-relaxed pl-3" style={{ color: "#9aa6a0" }}>
+                      Developing responsive UI with <span style={{ color: "#c8d4ce" }}>ReactJS</span> and{" "}
+                      <span style={{ color: "#c8d4ce" }}>Tailwind CSS</span>. Optimized UX,
+                      animations, scalable frontend architecture.
+                    </div>
+
+                    <div className="pt-2 border-t" style={{ borderColor: "rgba(255,255,255,0.05)" }}>
+                      <div className="text-[10px] mb-1" style={dimText}>// metrics</div>
+                      <div className="space-y-1">
+                        <Meter label="uptime" value={100} color="green" />
+                        <Meter label="code quality" value={94} color="green" />
+                        <Meter label="perf" value={89} color="amber" />
+                      </div>
+                    </div>
+                  </div>
+                </TerminalWindow>
+              </motion.div>
             </motion.div>
 
-            {/* Resume Button with Neomorphic Design */}
-            <div className="mt-12 text-center">
+            {/* Download button — chunky keycap */}
+            <div className="mt-10 text-center">
               <motion.a
                 href={Resume}
                 download
-                whileHover={shouldReduceMotion ? {} : { scale: 1.05, y: -2 }}
-                whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
+                whileHover={{ y: -2 }}
+                whileTap={{ y: 2 }}
                 transition={springSnappy}
-                className="relative inline-flex items-center gap-3 px-8 py-4 rounded-full font-semibold text-white 
-                  bg-[#1a1a1a]
-                  shadow-[10px_10px_25px_#0f0f0f,-10px_-10px_25px_#252525]
-                  hover:shadow-[6px_6px_15px_#0f0f0f,-6px_-6px_15px_#252525]
-                  active:shadow-[inset_6px_6px_15px_#0f0f0f,inset_-6px_-6px_15px_#252525]
-                  transition-shadow duration-300
-                  group/btn"
+                className="relative inline-flex items-center gap-3 px-7 py-3 rounded-md font-mono font-bold text-sm tracking-wider select-none group/btn"
+                style={{
+                  color: "#081210",
+                  background: "linear-gradient(180deg, #4ade80 0%, #22c55e 60%, #16a34a 100%)",
+                  boxShadow:
+                    "0 5px 0 #14532d, 0 7px 16px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.5), inset 0 -2px 0 rgba(0,0,0,0.2)",
+                }}
               >
-                {/* Neomorphic Inner Glow */}
-                <span className="absolute inset-0 rounded-full bg-gradient-to-b from-red-500/10 to-transparent opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></span>
-
-                {/* Neomorphic Red Glow Effect */}
-                <span className="absolute inset-0 rounded-full opacity-0 group-hover/btn:opacity-100 transition-opacity duration-500 shadow-[0_0_40px_rgba(239,68,68,0.2)]"></span>
-
-                <FaDownload className="relative text-xl group-hover/btn:animate-bounce" />
-                <span className="relative">Download Resume</span>
+                <span
+                  className="absolute inset-x-1 top-1 h-1/2 rounded-t-md pointer-events-none opacity-50"
+                  style={{ background: "linear-gradient(180deg, rgba(255,255,255,0.7) 0%, transparent 100%)" }}
+                />
+                <FaDownload className="relative text-base group-hover/btn:animate-bounce" />
+                <span className="relative">./download --resume</span>
               </motion.a>
             </div>
           </RevealOnScroll>
         </div>
       </section>
 
-      {/* ---------------- Certificates ---------------- */}
+      {/* ============ CERTIFICATES ============ */}
+      <section
+        id="certificates"
+        className="py-20 relative overflow-hidden"
+        style={{
+          background:
+            "radial-gradient(ellipse at 50% 50%, #0f1a15 0%, #0a100e 60%, #050807 100%)",
+        }}
+      >
+        <div
+          className="absolute inset-0 pointer-events-none opacity-[0.05]"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(103,232,249,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(103,232,249,0.5) 1px, transparent 1px)",
+            backgroundSize: "40px 40px",
+            maskImage: "radial-gradient(ellipse at center, black 30%, transparent 80%)",
+          }}
+        />
 
-      <section id="certificates" className="py-20 bg-[#1a1a1a]">
-        <div className="max-w-5xl mx-auto px-4 text-white">
+        <div className="relative max-w-5xl mx-auto px-4">
           <RevealOnScroll>
-            {/* Heading with animated underline */}
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 relative inline-block left-1/2 -translate-x-1/2">
-              <span className="text-red-400">Certificates</span>
-              {/* Neomorphic Underline - Animated */}
-              <motion.span
-                initial={{ scaleX: 0 }}
-                whileInView={{ scaleX: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.3 }}
-                style={{ transformOrigin: "center" }}
-                className="absolute -bottom-3 left-0 w-full h-[3px] rounded-full bg-[#1a1a1a] shadow-[inset_1px_1px_3px_#0f0f0f,inset_-1px_-1px_3px_#252525]"
-              />
-              <motion.span
-                initial={{ scaleX: 0, opacity: 0 }}
-                whileInView={{ scaleX: 1, opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
-                style={{ transformOrigin: "center" }}
-                className="absolute -bottom-3 left-0 w-full h-[3px] rounded-full bg-gradient-to-r from-red-500/0 via-red-500/30 to-red-500/0 blur-[2px]"
-              />
-            </h2>
+            <div className="mb-10 font-mono">
+              <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.3em]" style={glowCyan}>
+                <span className="w-2 h-2 rounded-full bg-cyan-400" style={{ boxShadow: "0 0 8px rgba(103,232,249,0.9)" }} />
+                section_02
+              </div>
+              <h2 className="mt-2 text-3xl md:text-4xl font-bold" style={{ color: "#e0f0ea" }}>
+                <span style={glowCyan}>$</span> ls ./certificates/
+              </h2>
+              <div className="h-px mt-3 bg-gradient-to-r from-cyan-500/40 via-cyan-500/10 to-transparent" />
+            </div>
 
             <motion.div
               variants={containerVariants}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, amount: 0.15 }}
-              className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"
+              className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"
             >
-              {certificates.map((cert, index) => (
-                <CertificateCard key={index} cert={cert} variants={itemVariants} />
+              {certificates.map((cert, i) => (
+                <CertificateCard key={i} cert={cert} variants={itemVariants} />
               ))}
             </motion.div>
           </RevealOnScroll>
         </div>
       </section>
 
-      {/* Global Neomorphic Styles */}
       <style jsx>{`
-        /* Neomorphic Base */
-        .neu-base {
-          background: #1a1a1a;
-          border-radius: 1rem;
-        }
-
-        /* Neomorphic Extruded */
-        .neu-extruded {
-          box-shadow: 8px 8px 20px #0f0f0f, -8px -8px 20px #252525;
-        }
-
-        /* Neomorphic Inset */
-        .neu-inset {
-          box-shadow: inset 4px 4px 12px #0f0f0f, inset -4px -4px 12px #252525;
-        }
-
-        /* Neomorphic Pressed (Active State) */
-        .neu-pressed {
-          box-shadow: inset 6px 6px 16px #0f0f0f, inset -6px -6px 16px #252525;
-        }
-
-        /* Scoped neomorphic transition (replaces the global * selector) */
-        .neu-transition {
-          transition: box-shadow 0.3s ease, background 0.3s ease,
-            transform 0.3s ease;
-        }
-
-        /* Neomorphic Shadow Variations */
-        .shadow-neu-sm {
-          box-shadow: 3px 3px 8px #0f0f0f, -3px -3px 8px #252525;
-        }
-
-        .shadow-neu-md {
-          box-shadow: 8px 8px 20px #0f0f0f, -8px -8px 20px #252525;
-        }
-
-        .shadow-neu-lg {
-          box-shadow: 12px 12px 30px #0f0f0f, -12px -12px 30px #252525;
-        }
-
-        .shadow-neu-inset {
-          box-shadow: inset 4px 4px 12px #0f0f0f, inset -4px -4px 12px #252525;
-        }
-
-        /* Respect user motion preference */
         @media (prefers-reduced-motion: reduce) {
-          .neu-transition {
-            transition: none;
-          }
+          * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
         }
       `}</style>
     </>

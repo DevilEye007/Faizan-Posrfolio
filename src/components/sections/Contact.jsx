@@ -1,42 +1,153 @@
 import { useState, useRef } from "react";
 import { RevealOnScroll } from "../RevealOnScroll";
 import BGVideo from "../../assets/Contact.mp4";
+import { FaTerminal, FaPaperPlane, FaLock, FaCheckCircle, FaExclamationTriangle, FaCircle } from "react-icons/fa";
 
+/* ============ Shared tokens ============ */
+const crtScreen = {
+  background: "radial-gradient(ellipse at 50% 40%, #0d1a14 0%, #081210 60%, #040808 100%)",
+  boxShadow: "inset 0 3px 8px rgba(0,0,0,0.95), inset 0 -1px 0 rgba(255,255,255,0.04), 0 1px 0 rgba(255,255,255,0.05)",
+};
+const scanlines = {
+  backgroundImage: "repeating-linear-gradient(0deg, rgba(255,255,255,0.06) 0px, rgba(255,255,255,0.06) 1px, transparent 1px, transparent 3px)",
+};
+const glowGreen = { color: "#4ade80", textShadow: "0 0 6px rgba(74,222,128,0.7)" };
+const glowAmber = { color: "#fbbf24", textShadow: "0 0 6px rgba(251,191,36,0.7)" };
+const glowCyan = { color: "#67e8f9", textShadow: "0 0 6px rgba(103,232,249,0.7)" };
+const glowRed = { color: "#f87171", textShadow: "0 0 6px rgba(248,113,113,0.7)" };
+const dim = { color: "#6b7c76" };
+const bodyText = { color: "#c8d4ce" };
+
+/* ============ LED ============ */
+const Led = ({ color = "green", pulse = false }) => {
+  const p = {
+    green: { hi: "#86efac", mid: "#22c55e", lo: "#14532d", g: "rgba(34,197,94,0.9)" },
+    amber: { hi: "#fcd34d", mid: "#f59e0b", lo: "#78350f", g: "rgba(245,158,11,0.9)" },
+    cyan: { hi: "#a5f3fc", mid: "#22d3ee", lo: "#155e75", g: "rgba(34,211,238,0.9)" },
+    red: { hi: "#ff9a9a", mid: "#ef4444", lo: "#7f1d1d", g: "rgba(239,68,68,0.9)" },
+  }[color];
+  return (
+    <span className="relative flex items-center justify-center w-2 h-2 shrink-0">
+      <span className="absolute inset-0 rounded-full bg-black/80 shadow-[inset_0_1px_2px_rgba(0,0,0,0.9)]" />
+      <span
+        className={`relative w-1.5 h-1.5 rounded-full ${pulse ? "animate-pulse" : ""}`}
+        style={{ background: `radial-gradient(circle at 30% 30%, ${p.hi}, ${p.mid} 50%, ${p.lo})`, boxShadow: `0 0 5px ${p.g}, inset 0 -1px 1px rgba(0,0,0,0.5)` }}
+      />
+    </span>
+  );
+};
+
+/* ============ Terminal input field ============ */
+const TerminalField = ({ label, name, value, onChange, placeholder, type = "text", required, multiline, pattern }) => (
+  <div className="font-mono">
+    <div className="flex items-center gap-1.5 mb-1.5 text-[10px] uppercase tracking-widest" style={dim}>
+      <span style={glowGreen}>$</span>
+      <span>{label}</span>
+      {required && <span style={glowRed}>*</span>}
+    </div>
+    <div
+      className="relative rounded-md transition-all duration-150 focus-within:border-green-500/50"
+      style={{
+        background: "rgba(0,0,0,0.55)",
+        border: "1px solid rgba(74,222,128,0.15)",
+        boxShadow: "inset 0 2px 4px rgba(0,0,0,0.8)",
+      }}
+    >
+      <div className="flex items-start">
+        <span className="pl-3 pt-2.5 font-mono text-[13px] shrink-0" style={glowGreen}>&gt;</span>
+        {multiline ? (
+          <textarea
+            name={name}
+            value={value}
+            onChange={onChange}
+            placeholder={placeholder}
+            required={required}
+            rows={4}
+            className="w-full bg-transparent border-0 px-2 py-2 text-[13px] font-mono outline-none resize-none"
+            style={{ color: "#e0f0ea", caretColor: "#4ade80" }}
+          />
+        ) : (
+          <input
+            type={type}
+            name={name}
+            value={value}
+            onChange={onChange}
+            placeholder={placeholder}
+            required={required}
+            pattern={pattern}
+            className="w-full bg-transparent border-0 px-2 py-2.5 text-[13px] font-mono outline-none"
+            style={{ color: "#e0f0ea", caretColor: "#4ade80" }}
+          />
+        )}
+      </div>
+    </div>
+  </div>
+);
+
+/* ============ Terminal select ============ */
+const TerminalSelect = ({ label, name, value, onChange, options, required, small }) => (
+  <div className="font-mono">
+    <div className="flex items-center gap-1.5 mb-1.5 text-[10px] uppercase tracking-widest" style={dim}>
+      <span style={glowGreen}>$</span>
+      <span>{label}</span>
+      {required && <span style={glowRed}>*</span>}
+    </div>
+    <div
+      className="relative rounded-md transition-all duration-150 focus-within:border-green-500/50"
+      style={{
+        background: "rgba(0,0,0,0.55)",
+        border: "1px solid rgba(74,222,128,0.15)",
+        boxShadow: "inset 0 2px 4px rgba(0,0,0,0.8)",
+      }}
+    >
+      <div className="flex items-center">
+        <span className={`pl-3 font-mono text-[13px] shrink-0 ${small ? "" : "py-2.5"}`} style={glowGreen}>&gt;</span>
+        <select
+          name={name}
+          value={value}
+          onChange={onChange}
+          required={required}
+          className="w-full bg-transparent border-0 px-2 py-2.5 text-[13px] font-mono outline-none appearance-none cursor-pointer"
+          style={{ color: "#e0f0ea" }}
+        >
+          {options.map((opt) => (
+            <option key={opt.value} value={opt.value} style={{ background: "#0a100e", color: "#e0f0ea" }}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
+        <svg className="w-3.5 h-3.5 mr-3 shrink-0 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: "#4ade80" }}>
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
+        </svg>
+      </div>
+    </div>
+  </div>
+);
+
+/* ============ Main ============ */
 export const Contact = () => {
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    service: "",
-    countryCode: "+92",
-    whatsapp: "",
-    message: "",
+    name: "", email: "", service: "", countryCode: "+92", whatsapp: "", message: "",
   });
-
   const [status, setStatus] = useState({ message: "", type: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const formRef = useRef(null);
 
   const countryCodes = [
-    { code: "+92", country: "🇵🇰 Pakistan" },
-    { code: "+1", country: "🇺🇸 USA/Canada" },
-    { code: "+91", country: "🇮🇳 India" },
+    { code: "+92", country: "🇵🇰 PK" },
+    { code: "+1", country: "🇺🇸 US/CA" },
+    { code: "+91", country: "🇮🇳 IN" },
     { code: "+44", country: "🇬🇧 UK" },
-    { code: "+61", country: "🇦🇺 Australia" },
-    { code: "+49", country: "🇩🇪 Germany" },
-    { code: "+33", country: "🇫🇷 France" },
-    { code: "+971", country: "🇦🇪 UAE" },
-    { code: "+966", country: "🇸🇦 Saudi Arabia" },
+    { code: "+61", country: "🇦🇺 AU" },
+    { code: "+49", country: "🇩🇪 DE" },
+    { code: "+33", country: "🇫🇷 FR" },
+    { code: "+971", country: "🇦🇪 AE" },
+    { code: "+966", country: "🇸🇦 SA" },
   ];
 
   const services = [
-    "Web Design",
-    "Web Development",
-    "App Development",
-    "UI/UX Design",
-    "Graphic Designing",
-    "Digital Marketing",
-    "SEO Services",
-    "Brand Identity",
+    "Web Design", "Web Development", "App Development", "UI/UX Design",
+    "Graphic Designing", "Digital Marketing", "SEO Services", "Brand Identity",
   ];
 
   const handleChange = (e) => {
@@ -48,7 +159,6 @@ export const Contact = () => {
     e.preventDefault();
     setIsSubmitting(true);
     setStatus({ message: "", type: "" });
-
     try {
       const response = await fetch("https://formspree.io/f/xblkjgao", {
         method: "POST",
@@ -62,400 +172,319 @@ export const Contact = () => {
           submittedAt: new Date().toISOString(),
         }),
       });
-
       if (response.ok) {
-        setStatus({
-          message: "✅ Message sent successfully! We'll get back to you soon.",
-          type: "success",
-        });
+        setStatus({ message: "200 OK · message queued for delivery", type: "success" });
         setFormData({ name: "", email: "", service: "", countryCode: "+92", whatsapp: "", message: "" });
         formRef.current?.reset();
-      } else throw new Error("Form submission failed");
+      } else throw new Error("failed");
     } catch (err) {
-      console.error(err);
-      setStatus({ message: "❌ Failed to send message. Try again later.", type: "error" });
+      setStatus({ message: "500 ERR · transmission failed, retry", type: "error" });
     } finally {
       setIsSubmitting(false);
-      setTimeout(() => setStatus({ message: "", type: "" }), 5000);
+      setTimeout(() => setStatus({ message: "", type: "" }), 6000);
     }
   };
+
+  const serviceOptions = [
+    { value: "", label: "-- select service --" },
+    ...services.map((s) => ({ value: s, label: s })),
+  ];
+  const countryOptions = countryCodes.map((c) => ({ value: c.code, label: `${c.country} ${c.code}` }));
 
   return (
     <section
       id="contact"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden py-12 lg:py-24 text-white bg-[#1a1a1a]"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden py-16 lg:py-24"
+      style={{ background: "radial-gradient(ellipse at 50% 20%, #0f1a15 0%, #0a100e 45%, #050807 100%)" }}
     >
-      {/* Neomorphic Background Pattern */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-[#1a1a1a]"></div>
-        
-        {/* Soft Ambient Glows */}
-        <div className="absolute w-[600px] h-[600px] bg-red-600/5 blur-[140px] rounded-full top-0 left-1/2 -translate-x-1/2"></div>
-        <div className="absolute w-[400px] h-[400px] bg-purple-600/5 blur-[120px] rounded-full bottom-0 right-0"></div>
-        <div className="absolute w-[300px] h-[300px] bg-blue-600/5 blur-[100px] rounded-full top-1/2 left-0"></div>
-        
-        {/* Neomorphic Grid Pattern */}
-        <div className="absolute inset-0 opacity-5" style={{
-          backgroundImage: `radial-gradient(circle at 1px 1px, #ffffff 1px, transparent 0)`,
-          backgroundSize: '40px 40px'
-        }}></div>
-      </div>
+      {/* Grid background */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-[0.07]"
+        style={{
+          backgroundImage: "linear-gradient(rgba(74,222,128,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(74,222,128,0.5) 1px, transparent 1px)",
+          backgroundSize: "40px 40px",
+          maskImage: "radial-gradient(ellipse at center, black 30%, transparent 80%)",
+        }}
+      />
 
-      {/* Background Video with Neomorphic Overlay */}
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        className="absolute top-0 left-0 w-full h-full object-cover z-0 opacity-30"
-      >
+      {/* Phosphor glow */}
+      <div
+        className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[700px] h-[400px] rounded-full blur-[140px] pointer-events-none"
+        style={{ background: "radial-gradient(circle, rgba(74,222,128,0.18), transparent 70%)" }}
+      />
+
+      {/* Video backdrop */}
+      <video autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover opacity-10">
         <source src={BGVideo} type="video/mp4" />
-        Your browser does not support the video tag.
       </video>
-
-      {/* Neomorphic Gradient Overlay */}
-      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-[#1a1a1a]/80 via-[#1a1a1a]/60 to-[#1a1a1a]/80 z-0" />
 
       <RevealOnScroll>
         <div className="relative z-10 w-full max-w-2xl px-4 mx-auto">
 
-          {/* Title with Neomorphic Design */}
-          <div className="text-center mb-12">
-            <h2 className="text-4xl sm:text-5xl font-extrabold mb-4 relative inline-block">
-              <span className="bg-gradient-to-r from-red-500 via-red-400 to-orange-400 bg-clip-text text-transparent">
-                Get In Touch
-              </span>
-              {/* Neomorphic Underline */}
-              <span className="absolute -bottom-3 left-0 w-full h-[3px] rounded-full bg-[#1a1a1a] shadow-[inset_1px_1px_3px_#0f0f0f,inset_-1px_-1px_3px_#252525]"></span>
-              <span className="absolute -bottom-3 left-0 w-full h-[3px] rounded-full bg-gradient-to-r from-red-500/0 via-red-500/30 to-red-500/0 blur-[2px]"></span>
+          {/* Section header */}
+          <div className="mb-10 font-mono text-center">
+            <div className="flex items-center justify-center gap-2 text-[11px] uppercase tracking-[0.3em]" style={glowGreen}>
+              <Led color="green" pulse />
+              module_05
+            </div>
+            <h2 className="mt-2 text-3xl md:text-4xl font-bold" style={{ color: "#e0f0ea" }}>
+              <span style={glowGreen}>$</span> ssh contact@deslog
+              <span className="inline-block w-[10px] h-[1em] ml-1 align-middle bg-green-400 animate-pulse" />
             </h2>
-
-            <p className="text-gray-300 max-w-lg mx-auto relative inline-block px-6 py-2 rounded-full
-              bg-[#1a1a1a]
-              shadow-[inset_2px_2px_6px_#0f0f0f,inset_-2px_-2px_6px_#252525]">
-              Have a project in mind? Let's discuss how we can bring your ideas to life.
+            <div className="h-px mt-3 bg-gradient-to-r from-transparent via-green-500/30 to-transparent" />
+            <p className="mt-3 text-[12px]" style={dim}>
+              // encrypted transmission · response within 24h
             </p>
           </div>
 
-          {/* Neomorphic Form Container */}
-          <div className="relative rounded-3xl bg-[#1a1a1a] shadow-[12px_12px_30px_#0f0f0f,-12px_-12px_30px_#252525] hover:shadow-[8px_8px_20px_#0f0f0f,-8px_-8px_20px_#252525] transition-all duration-500">
-            
-            {/* Neomorphic Top Highlight */}
-            <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/15 to-transparent rounded-t-3xl"></div>
-            
-            {/* Neomorphic Inner Glow */}
-            <div className="absolute inset-0 rounded-3xl bg-gradient-to-b from-red-500/5 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-500"></div>
-            
+          {/* Terminal window */}
+          <div
+            className="relative rounded-lg overflow-hidden font-mono"
+            style={{
+              background: "linear-gradient(180deg, #16161a 0%, #101014 100%)",
+              border: "1px solid rgba(74,222,128,0.25)",
+              boxShadow: "0 8px 32px rgba(0,0,0,0.7), inset 0 1px 0 rgba(74,222,128,0.1), 0 0 40px rgba(74,222,128,0.08)",
+            }}
+          >
+            {/* Title bar */}
+            <div
+              className="flex items-center gap-2 px-4 py-2.5 border-b"
+              style={{ background: "linear-gradient(180deg, #26262c, #1a1a20)", borderColor: "rgba(0,0,0,0.6)" }}
+            >
+              <div className="flex gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#ef4444", boxShadow: "0 0 4px rgba(239,68,68,0.9)" }} />
+                <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#f59e0b", boxShadow: "0 0 4px rgba(245,158,11,0.7)" }} />
+                <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#22c55e", boxShadow: "0 0 4px rgba(34,197,94,0.9)" }} />
+              </div>
+              <FaTerminal className="w-3 h-3 ml-2" style={glowGreen} />
+              <span className="text-[10px] tracking-widest ml-1" style={dim}>
+                contact_session — zsh — 80×24
+              </span>
+              <div className="ml-auto flex items-center gap-1.5">
+                <FaLock className="w-2.5 h-2.5" style={glowGreen} />
+                <span className="text-[9px] uppercase tracking-wider" style={glowGreen}>tls 1.3</span>
+              </div>
+            </div>
+
+            {/* CRT form body */}
             <form
               ref={formRef}
               onSubmit={handleSubmit}
-              className="relative p-6 md:p-8 rounded-3xl bg-[#1a1a1a] space-y-6"
+              className="relative p-5 md:p-6 space-y-5"
+              style={crtScreen}
             >
-              <div className="grid md:grid-cols-2 gap-6">
-                {/* Name Field with Neomorphic Input */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Your Name *
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="text"
-                      name="name"
-                      required
-                      value={formData.name}
-                      placeholder="John Doe"
-                      onChange={handleChange}
-                      className="w-full bg-[#1a1a1a] border-0 rounded-xl px-4 py-3 text-white placeholder-gray-500 
-                        shadow-[inset_3px_3px_8px_#0f0f0f,inset_-3px_-3px_8px_#252525]
-                        focus:shadow-[inset_2px_2px_4px_#0f0f0f,inset_-2px_-2px_4px_#252525]
-                        focus:ring-2 focus:ring-red-500/50
-                        transition-all duration-300 outline-none"
+              <div className="absolute inset-0 pointer-events-none opacity-20" style={scanlines} />
+
+              {/* Session greeting */}
+              <div className="relative font-mono text-[11px] leading-relaxed" style={bodyText}>
+                <div className="flex items-start gap-1.5">
+                  <span style={glowGreen}>$</span>
+                  <span>init contact_form.sh --verbose</span>
+                </div>
+                <div className="flex items-start gap-1.5 pl-3" style={dim}>
+                  <span>→</span>
+                  <span>secure channel established</span>
+                </div>
+              </div>
+
+              <div className="relative h-px bg-gradient-to-r from-green-500/20 via-green-500/10 to-transparent" />
+
+              {/* Name + Email row */}
+              <div className="relative grid md:grid-cols-2 gap-4">
+                <TerminalField
+                  label="name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  placeholder="John Doe"
+                  required
+                />
+                <TerminalField
+                  label="email"
+                  name="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="john@example.com"
+                  required
+                />
+              </div>
+
+              {/* Service select */}
+              <div className="relative">
+                <TerminalSelect
+                  label="service"
+                  name="service"
+                  value={formData.service}
+                  onChange={handleChange}
+                  options={serviceOptions}
+                  required
+                />
+              </div>
+
+              {/* WhatsApp */}
+              <div className="relative grid sm:grid-cols-[110px_1fr] gap-4">
+                <TerminalSelect
+                  label="cc"
+                  name="countryCode"
+                  value={formData.countryCode}
+                  onChange={handleChange}
+                  options={countryOptions}
+                  small
+                />
+                <TerminalField
+                  label="whatsapp"
+                  name="whatsapp"
+                  type="tel"
+                  value={formData.whatsapp}
+                  onChange={handleChange}
+                  placeholder="300 1234567"
+                  required
+                  pattern="[0-9]*"
+                />
+              </div>
+
+              {/* Message */}
+              <div className="relative">
+                <TerminalField
+                  label="message"
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
+                  placeholder="tell us about your project..."
+                  required
+                  multiline
+                />
+              </div>
+
+              {/* Submit */}
+              <div className="relative">
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="relative w-full flex items-center justify-center gap-2 px-6 py-3 rounded-md font-mono font-bold text-[13px] tracking-wider uppercase transition-all duration-100 active:translate-y-[2px] disabled:opacity-60 disabled:cursor-not-allowed"
+                  style={{
+                    color: "#081210",
+                    background: isSubmitting
+                      ? "linear-gradient(180deg, #5a6a64, #3a4a44)"
+                      : "linear-gradient(180deg, #4ade80 0%, #22c55e 60%, #16a34a 100%)",
+                    boxShadow: isSubmitting
+                      ? "inset 0 2px 4px rgba(0,0,0,0.6)"
+                      : "0 4px 0 #14532d, 0 6px 14px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.4), inset 0 -2px 0 rgba(0,0,0,0.2)",
+                  }}
+                >
+                  {!isSubmitting && (
+                    <span
+                      className="absolute inset-x-1 top-1 h-1/2 rounded-t-md pointer-events-none opacity-40"
+                      style={{ background: "linear-gradient(180deg, rgba(255,255,255,0.6) 0%, transparent 100%)" }}
                     />
-                    {/* Neomorphic Input Glow */}
-                    <div className="absolute inset-0 rounded-xl bg-gradient-to-b from-red-500/5 to-transparent opacity-0 focus-within:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
-                  </div>
-                </div>
-
-                {/* Email Field with Neomorphic Input */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Email *
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="email"
-                      name="email"
-                      required
-                      value={formData.email}
-                      placeholder="john@example.com"
-                      onChange={handleChange}
-                      className="w-full bg-[#1a1a1a] border-0 rounded-xl px-4 py-3 text-white placeholder-gray-500 
-                        shadow-[inset_3px_3px_8px_#0f0f0f,inset_-3px_-3px_8px_#252525]
-                        focus:shadow-[inset_2px_2px_4px_#0f0f0f,inset_-2px_-2px_4px_#252525]
-                        focus:ring-2 focus:ring-red-500/50
-                        transition-all duration-300 outline-none"
-                    />
-                    <div className="absolute inset-0 rounded-xl bg-gradient-to-b from-red-500/5 to-transparent opacity-0 focus-within:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Service Select with Neomorphic Design */}
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Service Interested In *
-                </label>
-                <div className="relative">
-                  <select
-                    name="service"
-                    required
-                    value={formData.service}
-                    onChange={handleChange}
-                    className="w-full bg-[#1a1a1a] border-0 rounded-xl px-4 py-3 text-white 
-                      shadow-[inset_3px_3px_8px_#0f0f0f,inset_-3px_-3px_8px_#252525]
-                      focus:shadow-[inset_2px_2px_4px_#0f0f0f,inset_-2px_-2px_4px_#252525]
-                      focus:ring-2 focus:ring-red-500/50
-                      transition-all duration-300 outline-none appearance-none cursor-pointer"
-                  >
-                    <option value="" className="text-gray-400 bg-[#1a1a1a]">Select a service</option>
-                    {services.map((s) => <option key={s} value={s} className="text-white bg-[#1a1a1a]">{s}</option>)}
-                  </select>
-                  {/* Neomorphic Select Arrow */}
-                  <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                    <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </div>
-                  <div className="absolute inset-0 rounded-xl bg-gradient-to-b from-red-500/5 to-transparent opacity-0 focus-within:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
-                </div>
-              </div>
-
-              {/* WhatsApp with Neomorphic Design */}
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  WhatsApp Number *
-                </label>
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <div className="relative sm:w-1/3 w-full">
-                    <select
-                      name="countryCode"
-                      value={formData.countryCode}
-                      onChange={handleChange}
-                      className="w-full bg-[#1a1a1a] border-0 rounded-xl px-4 py-3 text-white 
-                        shadow-[inset_3px_3px_8px_#0f0f0f,inset_-3px_-3px_8px_#252525]
-                        focus:shadow-[inset_2px_2px_4px_#0f0f0f,inset_-2px_-2px_4px_#252525]
-                        focus:ring-2 focus:ring-red-500/50
-                        transition-all duration-300 outline-none appearance-none cursor-pointer"
-                    >
-                      {countryCodes.map(({ code, country }) => (
-                        <option key={code} value={code} className="text-white bg-[#1a1a1a]">{country}</option>
-                      ))}
-                    </select>
-                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                      <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                      </svg>
-                    </div>
-                  </div>
-
-                  <div className="relative sm:w-2/3 w-full">
-                    <input
-                      type="tel"
-                      name="whatsapp"
-                      required
-                      value={formData.whatsapp}
-                      placeholder="300 1234567"
-                      onChange={handleChange}
-                      pattern="[0-9]*"
-                      className="w-full bg-[#1a1a1a] border-0 rounded-xl px-4 py-3 text-white placeholder-gray-500 
-                        shadow-[inset_3px_3px_8px_#0f0f0f,inset_-3px_-3px_8px_#252525]
-                        focus:shadow-[inset_2px_2px_4px_#0f0f0f,inset_-2px_-2px_4px_#252525]
-                        focus:ring-2 focus:ring-red-500/50
-                        transition-all duration-300 outline-none"
-                    />
-                    <div className="absolute inset-0 rounded-xl bg-gradient-to-b from-red-500/5 to-transparent opacity-0 focus-within:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
-                  </div>
-                </div>
-                <p className="text-xs text-gray-400 mt-2 pl-1">
-                  Include your country code and number without spaces
-                </p>
-              </div>
-
-              {/* Message Textarea with Neomorphic Design */}
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Project Details *
-                </label>
-                <div className="relative">
-                  <textarea
-                    name="message"
-                    required
-                    rows={4}
-                    value={formData.message}
-                    placeholder="Tell us about your project, timeline, and budget..."
-                    onChange={handleChange}
-                    className="w-full bg-[#1a1a1a] border-0 rounded-xl px-4 py-3 text-white placeholder-gray-500 
-                      shadow-[inset_3px_3px_8px_#0f0f0f,inset_-3px_-3px_8px_#252525]
-                      focus:shadow-[inset_2px_2px_4px_#0f0f0f,inset_-2px_-2px_4px_#252525]
-                      focus:ring-2 focus:ring-red-500/50
-                      transition-all duration-300 outline-none resize-none"
-                  />
-                  <div className="absolute inset-0 rounded-xl bg-gradient-to-b from-red-500/5 to-transparent opacity-0 focus-within:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
-                </div>
-              </div>
-
-              {/* Submit Button with Neomorphic Design */}
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className={`relative w-full py-3.5 rounded-xl font-semibold transition-all duration-300 overflow-hidden
-                  ${isSubmitting
-                    ? "bg-[#2a2a2a] cursor-not-allowed shadow-[inset_3px_3px_8px_#0f0f0f,inset_-3px_-3px_8px_#252525]"
-                    : "bg-[#1a1a1a] shadow-[8px_8px_20px_#0f0f0f,-8px_-8px_20px_#252525] hover:shadow-[4px_4px_12px_#0f0f0f,-4px_-4px_12px_#252525] active:shadow-[inset_6px_6px_16px_#0f0f0f,inset_-6px_-6px_16px_#252525] hover:bg-[#1e1e1e]"
-                  }`}
-              >
-                {/* Neomorphic Inner Glow */}
-                {!isSubmitting && (
-                  <span className="absolute inset-0 rounded-xl bg-gradient-to-b from-red-500/10 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300"></span>
-                )}
-                
-                {/* Neomorphic Red Glow Effect */}
-                {!isSubmitting && (
-                  <span className="absolute inset-0 rounded-xl opacity-0 hover:opacity-100 transition-opacity duration-500 shadow-[0_0_40px_rgba(239,68,68,0.15)]"></span>
-                )}
-
-                <span className="relative flex items-center justify-center gap-2">
+                  )}
                   {isSubmitting ? (
                     <>
-                      <div className="w-5 h-5 border-2 border-red-400 border-t-transparent rounded-full animate-spin"></div>
-                      Sending...
+                      <svg className="w-3.5 h-3.5 animate-spin" viewBox="0 0 24 24" fill="none">
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" opacity="0.25" />
+                        <path d="M12 2a10 10 0 0 1 10 10" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+                      </svg>
+                      transmitting...
                     </>
                   ) : (
                     <>
-                      Send Message
-                      <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                      </svg>
+                      <FaPaperPlane className="w-3.5 h-3.5" />
+                      send transmission
                     </>
                   )}
-                </span>
-              </button>
+                </button>
+              </div>
 
-              {/* Status Message with Neomorphic Design */}
+              {/* Status output */}
               {status.message && (
-                <div className={`relative p-4 rounded-xl text-center text-sm font-medium transition-all duration-300
-                  ${status.type === "success"
-                    ? "bg-[#1a1a1a] shadow-[inset_2px_2px_6px_#0f0f0f,inset_-2px_-2px_6px_#252525] text-green-400 border border-green-500/20"
-                    : "bg-[#1a1a1a] shadow-[inset_2px_2px_6px_#0f0f0f,inset_-2px_-2px_6px_#252525] text-red-400 border border-red-500/20"
-                  }`}>
-                  {status.message}
+                <div
+                  className="relative rounded p-3 font-mono text-[11px] flex items-start gap-2"
+                  style={{
+                    background: "rgba(0,0,0,0.5)",
+                    border: `1px solid ${status.type === "success" ? "rgba(74,222,128,0.3)" : "rgba(248,113,113,0.3)"}`,
+                    color: status.type === "success" ? "#4ade80" : "#f87171",
+                    boxShadow: status.type === "success"
+                      ? "0 0 16px rgba(74,222,128,0.15), inset 0 1px 0 rgba(74,222,128,0.1)"
+                      : "0 0 16px rgba(248,113,113,0.15), inset 0 1px 0 rgba(248,113,113,0.1)",
+                  }}
+                >
+                  <span style={status.type === "success" ? glowGreen : glowRed}>
+                    {status.type === "success" ? "✓" : "!"}
+                  </span>
+                  <span className="flex-1">{status.message}</span>
                 </div>
               )}
 
-              {/* Privacy Text */}
-              <p className="text-xs text-gray-400 text-center mt-2">
-                Your information is secure and will only be used to respond to your inquiry.
-              </p>
+              {/* Privacy footer */}
+              <div className="relative flex items-center justify-center gap-1.5 text-[10px]" style={dim}>
+                <FaLock className="w-2.5 h-2.5" />
+                <span>end-to-end encrypted · your data stays private</span>
+              </div>
             </form>
+
+            {/* Status bar */}
+            <div
+              className="flex items-center justify-between px-4 py-1.5 text-[9px] border-t"
+              style={{ background: "linear-gradient(180deg, #1a1a20, #101014)", borderColor: "rgba(0,0,0,0.6)", color: "#5a6a64" }}
+            >
+              <span>UTF-8 · zsh · contact@deslog</span>
+              <span className="flex items-center gap-1.5">
+                <Led color="green" pulse />
+                <span>connected</span>
+              </span>
+            </div>
           </div>
 
-          {/* Detailed Form Link with Neomorphic Design */}
-          <div className="mt-8 text-center">
-            <p className="text-gray-300 mb-4">Need a more detailed quote?</p>
+          {/* Detailed form link — secondary command */}
+          <div className="mt-8 text-center font-mono">
+            <div className="text-[11px] mb-3" style={dim}>
+              // need a detailed quote?
+            </div>
             <a
               href="https://deslog-digital-solutuons-requirement-form.vercel.app/"
               target="_blank"
               rel="noopener noreferrer"
-              className="relative inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl font-semibold text-white transition-all duration-300 overflow-hidden group/link
-                bg-[#1a1a1a]
-                shadow-[8px_8px_20px_#0f0f0f,-8px_-8px_20px_#252525]
-                hover:shadow-[4px_4px_12px_#0f0f0f,-4px_-4px_12px_#252525]
-                active:shadow-[inset_6px_6px_16px_#0f0f0f,inset_-6px_-6px_16px_#252525]
-                hover:bg-[#1e1e1e]"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-md text-[11px] font-bold uppercase tracking-widest transition-all duration-100 active:translate-y-[1px]"
+              style={{
+                color: "#4ade80",
+                background: "linear-gradient(180deg, #26262c, #1a1a20)",
+                border: "1px solid rgba(74,222,128,0.3)",
+                boxShadow: "0 3px 0 #08080a, 0 4px 8px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.08)",
+              }}
             >
-              {/* Neomorphic Inner Glow */}
-              <span className="absolute inset-0 rounded-xl bg-gradient-to-b from-red-500/10 to-transparent opacity-0 group-hover/link:opacity-100 transition-opacity duration-300"></span>
-              
-              {/* Neomorphic Red Glow Effect */}
-              <span className="absolute inset-0 rounded-xl opacity-0 group-hover/link:opacity-100 transition-opacity duration-500 shadow-[0_0_40px_rgba(239,68,68,0.15)]"></span>
-              
-              <span className="relative">Fill Detailed Requirement Form</span>
-              <svg className="relative w-5 h-5 group-hover/link:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              <FaTerminal className="w-2.5 h-2.5" />
+              <span>./open detailed_form.sh</span>
+              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
               </svg>
             </a>
           </div>
         </div>
       </RevealOnScroll>
 
-      {/* Global Neomorphic Styles */}
       <style jsx>{`
-        /* Neomorphic Base */
-        .neu-base {
-          background: #1a1a1a;
-          border-radius: 1rem;
-        }
-        
-        /* Neomorphic Extruded */
-        .neu-extruded {
-          box-shadow: 8px 8px 20px #0f0f0f, -8px -8px 20px #252525;
-        }
-        
-        /* Neomorphic Inset */
-        .neu-inset {
-          box-shadow: inset 4px 4px 12px #0f0f0f, inset -4px -4px 12px #252525;
-        }
-        
-        /* Neomorphic Pressed (Active State) */
-        .neu-pressed {
-          box-shadow: inset 6px 6px 16px #0f0f0f, inset -6px -6px 16px #252525;
-        }
-        
-        /* Smooth Transitions */
-        * {
-          transition: box-shadow 0.3s ease, background 0.3s ease, transform 0.3s ease;
-        }
-
-        /* Neomorphic Grid Pattern */
-        .neu-grid {
-          background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0);
-          background-size: 40px 40px;
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-          width: 6px;
-        }
-        
-        ::-webkit-scrollbar-track {
-          background: #1a1a1a;
-          box-shadow: inset 1px 1px 3px #0f0f0f, inset -1px -1px 3px #252525;
-        }
-        
-        ::-webkit-scrollbar-thumb {
-          background: #2a2a2a;
-          box-shadow: 2px 2px 4px #0f0f0f, -2px -2px 4px #252525;
-          border-radius: 10px;
-        }
-        
-        ::-webkit-scrollbar-thumb:hover {
-          background: #333;
-        }
-
-        /* Remove default select styling */
         select {
           -webkit-appearance: none;
           -moz-appearance: none;
           appearance: none;
         }
-
-        /* Input autofill styling */
         input:-webkit-autofill,
         textarea:-webkit-autofill,
         select:-webkit-autofill {
-          -webkit-box-shadow: inset 3px 3px 8px #0f0f0f, inset -3px -3px 8px #252525 !important;
-          -webkit-text-fill-color: white !important;
-          background-color: #1a1a1a !important;
+          -webkit-box-shadow: inset 0 2px 4px rgba(0,0,0,0.8) !important;
+          -webkit-text-fill-color: #e0f0ea !important;
+          background-color: rgba(0,0,0,0.55) !important;
+        }
+        input::placeholder,
+        textarea::placeholder {
+          color: rgba(107,124,118,0.6);
+        }
+        @media (prefers-reduced-motion: reduce) {
+          * {
+            animation-duration: 0.01ms !important;
+            transition-duration: 0.01ms !important;
+          }
         }
       `}</style>
     </section>

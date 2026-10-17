@@ -1,5 +1,5 @@
 import { RevealOnScroll } from "../RevealOnScroll";
-import { FaStar } from "react-icons/fa";
+import { FaTerminal, FaQuoteRight, FaCheck, FaCodeBranch } from "react-icons/fa";
 import Cus from "./Men.png";
 import Cus2 from "./Women.png";
 
@@ -9,149 +9,247 @@ import { Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 
-const reviews = [
-  {
-    name: "Jawad Ali",
-    title: "Owner, Roucha Cielo",
-    review:
-      "Amazing work! The team delivered a stunning e-commerce site that exceeded our expectations. Highly recommend!",
-    avatar: Cus,
-    rating: 5,
-  },
-  {
-    name: "Sadia Imran",
-    title: "Owner, Pixel Crafter",
-    review:
-      "Pixel Crafter's portfolio redesign was a game-changer. Their attention to detail and creativity is unmatched.",
-    avatar: Cus2,
-    rating: 4,
-  },
-];
+/* ============ Shared tokens ============ */
+const crtScreen = {
+  background: "radial-gradient(ellipse at 50% 40%, #0d1a14 0%, #081210 60%, #040808 100%)",
+  boxShadow: "inset 0 3px 8px rgba(0,0,0,0.95), inset 0 -1px 0 rgba(255,255,255,0.04), 0 1px 0 rgba(255,255,255,0.05)",
+};
+const scanlines = {
+  backgroundImage: "repeating-linear-gradient(0deg, rgba(255,255,255,0.06) 0px, rgba(255,255,255,0.06) 1px, transparent 1px, transparent 3px)",
+};
+const glowGreen = { color: "#4ade80", textShadow: "0 0 6px rgba(74,222,128,0.7)" };
+const glowAmber = { color: "#fbbf24", textShadow: "0 0 6px rgba(251,191,36,0.7)" };
+const glowCyan = { color: "#67e8f9", textShadow: "0 0 6px rgba(103,232,249,0.7)" };
+const glowRed = { color: "#f87171", textShadow: "0 0 6px rgba(248,113,113,0.7)" };
+const dim = { color: "#6b7c76" };
+const bodyText = { color: "#c8d4ce" };
 
-const ReviewCard = ({ review }) => (
-  <div className="relative group rounded-2xl bg-[#1a1a1a] shadow-[8px_8px_20px_#0f0f0f,-8px_-8px_20px_#252525] hover:shadow-[4px_4px_12px_#0f0f0f,-4px_-4px_12px_#252525] hover:-translate-y-2 transition-all duration-300 h-full">
-    
-    {/* Neomorphic Top Highlight */}
-    <div className="absolute inset-x-4 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent rounded-full"></div>
-    
-    {/* Neomorphic Inner Glow */}
-    <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-red-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-    
-    {/* Neomorphic Border Glow on Hover */}
-    <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-r from-red-500/0 via-red-500/20 to-red-500/0 opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-500"></div>
-    
-    <div className="relative p-6 rounded-2xl bg-[#1a1a1a] transition-all duration-300 group-hover:bg-[#1e1e1e] h-full flex flex-col justify-between">
+/* ============ LED ============ */
+const Led = ({ color = "green", pulse = false }) => {
+  const p = {
+    green: { hi: "#86efac", mid: "#22c55e", lo: "#14532d", g: "rgba(34,197,94,0.9)" },
+    amber: { hi: "#fcd34d", mid: "#f59e0b", lo: "#78350f", g: "rgba(245,158,11,0.9)" },
+    cyan: { hi: "#a5f3fc", mid: "#22d3ee", lo: "#155e75", g: "rgba(34,211,238,0.9)" },
+    red: { hi: "#ff9a9a", mid: "#ef4444", lo: "#7f1d1d", g: "rgba(239,68,68,0.9)" },
+  }[color];
+  return (
+    <span className="relative flex items-center justify-center w-2 h-2 shrink-0">
+      <span className="absolute inset-0 rounded-full bg-black/80 shadow-[inset_0_1px_2px_rgba(0,0,0,0.9)]" />
+      <span
+        className={`relative w-1.5 h-1.5 rounded-full ${pulse ? "animate-pulse" : ""}`}
+        style={{ background: `radial-gradient(circle at 30% 30%, ${p.hi}, ${p.mid} 50%, ${p.lo})`, boxShadow: `0 0 5px ${p.g}, inset 0 -1px 1px rgba(0,0,0,0.5)` }}
+      />
+    </span>
+  );
+};
 
-      {/* User with Neomorphic Avatar */}
-      <div className="flex items-center gap-4 mb-4">
-        <div className="relative">
-          {/* Neomorphic Avatar Frame */}
-          <div className="absolute -inset-1 rounded-full bg-[#1a1a1a] shadow-[inset_2px_2px_6px_#0f0f0f,inset_-2px_-2px_6px_#252525]"></div>
-          <img
-            src={review.avatar}
-            alt={review.name}
-            className="relative w-14 h-14 rounded-full border-2 border-red-500/30 object-cover shadow-lg transition-all duration-300 group-hover:border-red-500 group-hover:scale-105"
+/* ============ Rating meter (5 cells) ============ */
+const Rating = ({ value }) => (
+  <div className="flex items-center gap-1">
+    <div className="flex gap-[3px]">
+      {Array.from({ length: 5 }).map((_, i) => (
+        <span
+          key={i}
+          className="w-4 h-1.5 rounded-[1px]"
+          style={{
+            background: i < value
+              ? "linear-gradient(90deg, #fbbf24, #f59e0b)"
+              : "rgba(255,255,255,0.08)",
+            boxShadow: i < value
+              ? "0 0 4px rgba(251,191,36,0.8)"
+              : "inset 0 1px 1px rgba(0,0,0,0.6)",
+          }}
+        />
+      ))}
+    </div>
+    <span className="text-[9px] font-mono ml-1" style={glowAmber}>
+      {value}.0/5
+    </span>
+  </div>
+);
+
+/* ============ Review card — log entry ============ */
+const ReviewCard = ({ review, index }) => (
+  <div
+    className="relative group h-full rounded-lg overflow-hidden font-mono"
+    style={{
+      background: "linear-gradient(180deg, #16161a 0%, #101014 100%)",
+      border: "1px solid rgba(74,222,128,0.2)",
+      boxShadow: "inset 0 1px 0 rgba(255,255,255,0.05), 0 4px 12px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,0,0,0.4)",
+      transition: "box-shadow 0.3s ease, transform 0.3s ease",
+    }}
+  >
+    {/* Title bar */}
+    <div
+      className="flex items-center gap-2 px-3 py-2 border-b"
+      style={{ background: "rgba(255,255,255,0.02)", borderColor: "rgba(0,0,0,0.6)" }}
+    >
+      <span className="w-2 h-2 rounded-full" style={{ background: "#ef4444", boxShadow: "0 0 3px rgba(239,68,68,0.9)" }} />
+      <span className="w-2 h-2 rounded-full" style={{ background: "#f59e0b", boxShadow: "0 0 3px rgba(245,158,11,0.7)" }} />
+      <span className="w-2 h-2 rounded-full" style={{ background: "#22c55e", boxShadow: "0 0 3px rgba(34,197,94,0.9)" }} />
+
+      <FaTerminal className="w-3 h-3 ml-2" style={glowGreen} />
+      <span className="text-[9px] tracking-widest uppercase ml-1" style={dim}>
+        review_{String(index + 1).padStart(2, "0")}.log
+      </span>
+
+      <div className="ml-auto flex items-center gap-1">
+        <Led color="green" pulse />
+        <span className="text-[9px] uppercase tracking-wider" style={glowGreen}>ok</span>
+      </div>
+    </div>
+
+    {/* CRT body */}
+    <div className="relative p-5" style={crtScreen}>
+      <div className="absolute inset-0 pointer-events-none opacity-20" style={scanlines} />
+
+      {/* User row — engraved header */}
+      <div className="relative flex items-center gap-3 mb-3 pb-3 border-b" style={{ borderColor: "rgba(74,222,128,0.1)" }}>
+        {/* Avatar well */}
+        <div className="relative shrink-0">
+          <div
+            className="absolute inset-0 rounded-full"
+            style={{
+              background: "linear-gradient(180deg, #0a1410, #050a08)",
+              boxShadow: "inset 0 2px 4px rgba(0,0,0,0.95), inset 0 -1px 0 rgba(74,222,128,0.15)",
+            }}
           />
-          {/* Neomorphic Avatar Glow */}
-          <div className="absolute -inset-2 rounded-full bg-red-500/10 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <div className="relative p-0.5 rounded-full">
+            <img
+              src={review.avatar}
+              alt={review.name}
+              className="w-11 h-11 rounded-full object-cover transition-transform duration-500 group-hover:scale-110"
+              style={{ filter: "contrast(1.05) saturate(0.9)" }}
+            />
+          </div>
+          {/* LED status on avatar */}
+          <span className="absolute -bottom-0.5 -right-0.5">
+            <Led color="green" pulse />
+          </span>
         </div>
 
-        <div className="text-left">
-          <h3 className="text-lg font-semibold text-red-400 group-hover:text-red-300 transition-colors duration-300">
+        <div className="min-w-0">
+          <h3 className="text-[13px] font-bold truncate" style={{ color: "#e0f0ea" }}>
             {review.name}
           </h3>
-
-          <p className="text-sm text-gray-400 group-hover:text-gray-300 transition-colors duration-300">
-            {review.title}
+          <p className="text-[10px] truncate" style={dim}>
+            // {review.title}
           </p>
         </div>
       </div>
 
-      {/* Review with Neomorphic Quote */}
-      <p className="text-sm text-gray-300 italic leading-relaxed mb-5 relative pl-6 before:content-['“'] before:absolute before:left-0 before:text-4xl before:text-red-500/50 before:top-[-8px] before:font-serif group-hover:before:text-red-400 transition-all duration-300">
-        {review.review}
-      </p>
-
-      {/* Stars with Neomorphic Effect */}
-      <div className="flex gap-1">
-        {Array.from({ length: review.rating }, (_, i) => (
-          <div key={i} className="relative">
-            <FaStar
-              className="text-yellow-400 transition-all duration-300 group-hover:scale-110 group-hover:rotate-12"
-              style={{
-                filter: 'drop-shadow(0 0 8px rgba(250, 204, 21, 0.3))'
-              }}
-            />
-          </div>
-        ))}
-        {/* Empty stars */}
-        {Array.from({ length: 5 - review.rating }, (_, i) => (
-          <FaStar key={`empty-${i}`} className="text-gray-600/50" />
-        ))}
+      {/* Review body — terminal output */}
+      <div
+        className="relative rounded p-3 mb-3 text-[12px] leading-relaxed"
+        style={{
+          background: "rgba(0,0,0,0.45)",
+          border: "1px solid rgba(255,255,255,0.04)",
+          color: bodyText,
+        }}
+      >
+        <div className="flex items-start gap-1.5">
+          <span style={glowGreen}>&gt;</span>
+          <FaQuoteRight className="w-2.5 h-2.5 mt-1 shrink-0" style={{ color: "rgba(103,232,249,0.5)" }} />
+          <p className="flex-1 italic">"{review.review}"</p>
+        </div>
       </div>
+
+      {/* Footer — rating + verified */}
+      <div className="flex items-center justify-between">
+        <Rating value={review.rating} />
+        <div className="flex items-center gap-1 text-[9px]" style={glowGreen}>
+          <FaCheck className="w-2.5 h-2.5" />
+          <span className="uppercase tracking-wider">verified</span>
+        </div>
+      </div>
+    </div>
+
+    {/* Status bar */}
+    <div
+      className="flex items-center justify-between px-3 py-1 text-[8px] border-t"
+      style={{ background: "linear-gradient(180deg, #1a1a20, #101014)", borderColor: "rgba(0,0,0,0.6)", color: "#5a6a64" }}
+    >
+      <span className="flex items-center gap-1">
+        <FaCodeBranch className="w-2 h-2" />
+        <span>~/reviews/{review.name.toLowerCase().replace(/\s+/g, "-")}</span>
+      </span>
+      <span>{review.rating}/5 ★</span>
     </div>
   </div>
 );
 
+/* ============ Main ============ */
 const CustomerReview = () => {
+  const reviews = [
+    {
+      name: "Jawad Ali",
+      title: "Owner, Roucha Cielo",
+      review: "Amazing work! The team delivered a stunning e-commerce site that exceeded our expectations. Highly recommend!",
+      avatar: Cus,
+      rating: 5,
+    },
+    {
+      name: "Sadia Imran",
+      title: "Owner, Pixel Crafter",
+      review: "Pixel Crafter's portfolio redesign was a game-changer. Their attention to detail and creativity is unmatched.",
+      avatar: Cus2,
+      rating: 4,
+    },
+  ];
+
   return (
     <section
       id="reviews"
-      className="relative py-20 px-4 bg-[#1a1a1a] text-white overflow-hidden"
+      className="relative py-20 px-4 overflow-hidden"
+      style={{ background: "radial-gradient(ellipse at 50% 30%, #0f1a15 0%, #0a100e 45%, #050807 100%)" }}
     >
+      {/* Grid background */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-[0.07]"
+        style={{
+          backgroundImage: "linear-gradient(rgba(74,222,128,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(74,222,128,0.5) 1px, transparent 1px)",
+          backgroundSize: "40px 40px",
+          maskImage: "radial-gradient(ellipse at center, black 30%, transparent 80%)",
+        }}
+      />
 
-      {/* Neomorphic Background Pattern */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-[#1a1a1a]"></div>
-        
-        {/* Soft Ambient Glows */}
-        <div className="absolute top-0 left-0 w-96 h-96 bg-red-600/5 blur-[140px] rounded-full" />
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-red-500/5 blur-[140px] rounded-full" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-purple-600/5 blur-[120px] rounded-full"></div>
-        
-        {/* Neomorphic Grid Pattern */}
-        <div className="absolute inset-0 opacity-5" style={{
-          backgroundImage: `radial-gradient(circle at 1px 1px, #ffffff 1px, transparent 0)`,
-          backgroundSize: '40px 40px'
-        }}></div>
-      </div>
+      {/* Phosphor glow */}
+      <div
+        className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[700px] h-[400px] rounded-full blur-[140px] pointer-events-none"
+        style={{ background: "radial-gradient(circle, rgba(74,222,128,0.18), transparent 70%)" }}
+      />
 
       <RevealOnScroll>
-        <div className="max-w-6xl mx-auto text-center relative z-10">
-
-          {/* Title with Neomorphic Design */}
-          <div className="mb-12">
-            <h2 className="text-4xl md:text-5xl font-extrabold mb-4 relative inline-block">
-              <span className="bg-gradient-to-r from-red-500 via-red-400 to-orange-400 bg-clip-text text-transparent">
-                What Clients Say
-              </span>
-              {/* Neomorphic Underline */}
-              <span className="absolute -bottom-3 left-0 w-full h-[3px] rounded-full bg-[#1a1a1a] shadow-[inset_1px_1px_3px_#0f0f0f,inset_-1px_-1px_3px_#252525]"></span>
-              <span className="absolute -bottom-3 left-0 w-full h-[3px] rounded-full bg-gradient-to-r from-red-500/0 via-red-500/30 to-red-500/0 blur-[2px]"></span>
+        <div className="max-w-6xl mx-auto relative z-10">
+          {/* Section header */}
+          <div className="mb-12 font-mono text-center">
+            <div className="flex items-center justify-center gap-2 text-[11px] uppercase tracking-[0.3em]" style={glowGreen}>
+              <span className="w-2 h-2 rounded-full bg-green-400" style={{ boxShadow: "0 0 8px rgba(74,222,128,0.9)" }} />
+              module_04
+            </div>
+            <h2 className="mt-2 text-3xl md:text-4xl font-bold" style={{ color: "#e0f0ea" }}>
+              <span style={glowGreen}>$</span> tail -f ./reviews.log
+              <span className="inline-block w-[10px] h-[1em] ml-1 align-middle bg-green-400 animate-pulse" />
             </h2>
-
-            <p className="text-gray-400 max-w-2xl mx-auto relative inline-block px-6 py-2 rounded-full
-              bg-[#1a1a1a]
-              shadow-[inset_2px_2px_6px_#0f0f0f,inset_-2px_-2px_6px_#252525]">
-              Hear what our clients say about working with us on high-impact
-              web and design projects.
+            <div className="h-px mt-3 bg-gradient-to-r from-transparent via-green-500/30 to-transparent" />
+            <p className="mt-3 text-[12px]" style={dim}>
+              // {reviews.length} verified client logs · auto-refreshing feed
             </p>
           </div>
 
-          {/* Neomorphic Swiper Container */}
-          <div className="relative rounded-2xl p-[1px] bg-gradient-to-br from-red-600/20 via-transparent to-red-600/20">
-            <div className="rounded-2xl bg-[#1a1a1a] p-4">
+          {/* Swiper */}
+          <div
+            className="relative rounded-lg p-[1px]"
+            style={{
+              background: "linear-gradient(135deg, rgba(74,222,128,0.3), transparent 50%, rgba(103,232,249,0.2))",
+            }}
+          >
+            <div className="rounded-lg p-4" style={{ background: "#0a100e" }}>
               <Swiper
-                spaceBetween={30}
+                spaceBetween={20}
                 loop={true}
-                autoplay={{
-                  delay: 4000,
-                  disableOnInteraction: false,
-                }}
-                pagination={{
-                  clickable: true,
-                  el: ".custom-swiper-pagination",
-                }}
+                autoplay={{ delay: 4000, disableOnInteraction: false }}
+                pagination={{ clickable: true, el: ".custom-swiper-pagination" }}
                 breakpoints={{
                   0: { slidesPerView: 1 },
                   768: { slidesPerView: 2 },
@@ -162,100 +260,55 @@ const CustomerReview = () => {
               >
                 {reviews.map((review, index) => (
                   <SwiperSlide key={index} className="flex items-stretch">
-                    <ReviewCard review={review} />
+                    <ReviewCard review={review} index={index} />
                   </SwiperSlide>
                 ))}
               </Swiper>
             </div>
           </div>
 
-          {/* Neomorphic Pagination */}
+          {/* Pagination */}
           <div className="custom-swiper-pagination mt-6 flex justify-center gap-3" />
-
         </div>
       </RevealOnScroll>
 
-      {/* Global Neomorphic Styles */}
+      {/* Styles */}
       <style jsx>{`
-        /* Neomorphic Base */
-        .neu-base {
-          background: #1a1a1a;
-          border-radius: 1rem;
-        }
-        
-        /* Neomorphic Extruded */
-        .neu-extruded {
-          box-shadow: 8px 8px 20px #0f0f0f, -8px -8px 20px #252525;
-        }
-        
-        /* Neomorphic Inset */
-        .neu-inset {
-          box-shadow: inset 4px 4px 12px #0f0f0f, inset -4px -4px 12px #252525;
-        }
-        
-        /* Smooth Transitions */
-        * {
-          transition: box-shadow 0.3s ease, background 0.3s ease, transform 0.3s ease;
-        }
-
-        /* Neomorphic Grid Pattern */
-        .neu-grid {
-          background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0);
-          background-size: 40px 40px;
-        }
-
-        /* Custom Swiper Pagination - Neomorphic Style */
+        /* Swiper pagination — LED indicators */
         .custom-swiper-pagination .swiper-pagination-bullet {
-          width: 12px;
-          height: 12px;
-          background: #1a1a1a;
-          border-radius: 50%;
-          box-shadow: 3px 3px 8px #0f0f0f, -3px -3px 8px #252525;
+          width: 8px;
+          height: 8px;
+          background: rgba(74,222,128,0.15);
+          border-radius: 2px;
           opacity: 1;
           transition: all 0.3s ease;
-          margin: 0 4px;
+          margin: 0 3px !important;
+          box-shadow: inset 0 1px 1px rgba(0,0,0,0.6);
         }
 
         .custom-swiper-pagination .swiper-pagination-bullet-active {
-          background: #1a1a1a;
-          box-shadow: inset 3px 3px 8px #0f0f0f, inset -3px -3px 8px #252525, 0 0 20px rgba(239, 68, 68, 0.3);
-          transform: scale(1.2);
-          border: 2px solid rgba(239, 68, 68, 0.3);
+          width: 24px;
+          background: linear-gradient(90deg, #4ade80, #22c55e);
+          box-shadow: 0 0 8px rgba(74,222,128,0.8), inset 0 1px 0 rgba(255,255,255,0.3);
         }
 
         .custom-swiper-pagination .swiper-pagination-bullet:hover {
-          transform: scale(1.1);
-          box-shadow: 2px 2px 6px #0f0f0f, -2px -2px 6px #252525;
+          background: rgba(74,222,128,0.4);
         }
 
-        /* Swiper Container Styling */
         .swiper {
-          padding: 8px 4px;
+          padding: 4px;
         }
-
         .swiper-slide {
           height: auto;
           display: flex;
         }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-          width: 6px;
-        }
-        
-        ::-webkit-scrollbar-track {
-          background: #1a1a1a;
-          box-shadow: inset 1px 1px 3px #0f0f0f, inset -1px -1px 3px #252525;
-        }
-        
-        ::-webkit-scrollbar-thumb {
-          background: #2a2a2a;
-          box-shadow: 2px 2px 4px #0f0f0f, -2px -2px 4px #252525;
-          border-radius: 10px;
-        }
-        
-        ::-webkit-scrollbar-thumb:hover {
-          background: #333;
+        @media (prefers-reduced-motion: reduce) {
+          * {
+            animation-duration: 0.01ms !important;
+            transition-duration: 0.01ms !important;
+          }
         }
       `}</style>
     </section>
